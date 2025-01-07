@@ -72,6 +72,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: MainAppBar(
         title: 'Create Event',
         automaticallyImplyLeading: true,

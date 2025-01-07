@@ -18,6 +18,7 @@ class _AllEventsPageState extends State<AllEventsPage> {
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: MainAppBar(
         title: 'All Events',
         automaticallyImplyLeading: false,

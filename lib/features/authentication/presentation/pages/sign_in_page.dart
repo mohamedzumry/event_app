@@ -38,6 +38,7 @@ class SignInPage extends StatelessWidget {
         }
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: MainAppBar(
           title: 'Sign In',
           centerTitle: true,

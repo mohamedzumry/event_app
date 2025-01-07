@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "107222566849",
+    "project_id": "mad-cw2-ku",
+    "storage_bucket": "mad-cw2-ku.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:107222566849:android:d6bd8fa33a5b998e0e9140",
+        "android_client_info": {
+          "package_name": "com.esoftcw2.event_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "107222566849-2ki35v1isu43flnn4h0pdn8sgdl0iv1p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.esoftcw2.event_app",
+            "certificate_hash": "915ba62d402c94c8dce47ce393a1b21cb70ceed4"
+          }
+        },
+        {
+          "client_id": "107222566849-hkk9b7bo4rnjuf8n649re6l1bd20n23j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyyEW8zOrhi_20nxMCj6HBmEzk400hPmo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "107222566849-hkk9b7bo4rnjuf8n649re6l1bd20n23j.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "107222566849-vam938lkr9i4vigu1ptcnb37ak0v2ufo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.eventApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -6,8 +6,6 @@ part 'events_state.dart';
 
 class EventsBloc extends Bloc<EventsEvent, EventsState> {
   EventsBloc() : super(EventsInitial()) {
-    on<EventsEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+    on<EventsEvent>((event, emit) {});
   }
 }

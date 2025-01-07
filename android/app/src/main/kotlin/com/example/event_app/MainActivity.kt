@@ -1,4 +1,4 @@
-package com.example.event_app
+package com.esoftcw2.event_app
 
 import io.flutter.embedding.android.FlutterActivity
 

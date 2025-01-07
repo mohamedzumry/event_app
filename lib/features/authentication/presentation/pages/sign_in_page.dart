@@ -1,63 +1,37 @@
 import 'package:event_app/core/widgets/main_app_bar.dart';
 import 'package:event_app/core/widgets/main_bottom_bar.dart';
 import 'package:event_app/features/authentication/presentation/bloc/authentication_bloc.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class SignInSignUpPage extends StatelessWidget {
+class SignInPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  SignInSignUpPage({super.key});
-
-  // void _signInWithGoogle(BuildContext context) async {
-  //   User? user = await Authentication.signInWithGoogle();
-  //   if (user != null) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Signed in as ${user.email}')),
-  //     );
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Failed to sign in with Google')),
-  //     );
-  //   }
-  // }
-
-  // void _signUpWithEmailPassword(BuildContext context) async {
-  //   User? user = await Authentication.signUpWithEmailAndPassword(
-  //     _emailController.text,
-  //     _passwordController.text,
-  //   );
-  //   if (user != null) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Signed up as ${user.email}')),
-  //     );
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Failed to sign up')),
-  //     );
-  //   }
-  // }
+  SignInPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
+      bloc: BlocProvider.of<AuthenticationBloc>(context),
       listener: (context, state) {
-        if (state is UserLoggedInState) {
+        if (state is GoogleLoginSuccessState) {
           context.goNamed('home');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Signed in as ${state.user.displayName}')),
           );
-        } else if (state is UserRegistrationSuccessState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Signed up successfully')),
-          );
-        } else if (state is UserLoginFailedState) {
+        } else if (state is GoogleLoginFailedState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
-        } else if (state is UserRegistrationFailedState) {
+        } else if (state is UserLoginSuccessState) {
+          context.goNamed('home');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Signed in as ${state.user.displayName}')),
+          );
+        } else if (state is UserLoginFailedState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
@@ -65,7 +39,7 @@ class SignInSignUpPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: MainAppBar(
-          title: 'Sign In / Sign Up',
+          title: 'Sign In',
           centerTitle: true,
           automaticallyImplyLeading: false,
         ),
@@ -101,8 +75,7 @@ class SignInSignUpPage extends StatelessWidget {
                         width: 30.0,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                              image:
-                                  AssetImage('assets/images/google-logo.png'),
+                              image: AssetImage('assets/images/sign-in.png'),
                               fit: BoxFit.cover),
                           shape: BoxShape.circle,
                         ),
@@ -110,13 +83,13 @@ class SignInSignUpPage extends StatelessWidget {
                       SizedBox(
                         width: 20,
                       ),
-                      Text("Sign Up with Email & Password")
+                      Text("Sign In with Email & Password")
                     ],
                   ),
                   onPressed: () => context.read<AuthenticationBloc>().add(
-                        const SignUpWithGoogleUsingEmailPasswordEvent(
-                          'email',
-                          'password',
+                        SignInWithGoogleUsingEmailPasswordEvent(
+                          _emailController.text,
+                          _passwordController.text,
                         ),
                       ),
                 ),
@@ -124,7 +97,7 @@ class SignInSignUpPage extends StatelessWidget {
               const SizedBox(height: 10),
               const Text(
                 "OR",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               Padding(
@@ -155,6 +128,22 @@ class SignInSignUpPage extends StatelessWidget {
                   onPressed: () => context.read<AuthenticationBloc>().add(
                         const SignInWithGoogleEvent(),
                       ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              RichText(
+                text: TextSpan(
+                  text: 'Already have an account? ',
+                  style: const TextStyle(color: Colors.black),
+                  children: [
+                    TextSpan(
+                      text: 'Sign Up',
+                      style: const TextStyle(
+                          color: Colors.teal, fontWeight: FontWeight.bold),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => context.goNamed('signUp'),
+                    ),
+                  ],
                 ),
               ),
             ],

@@ -17,8 +17,26 @@ class SignInWithGoogleEvent extends AuthenticationEvent {
 class SignUpWithGoogleUsingEmailPasswordEvent extends AuthenticationEvent {
   final String email;
   final String password;
-  const SignUpWithGoogleUsingEmailPasswordEvent(this.email, this.password);
+  final String displayName;
+  const SignUpWithGoogleUsingEmailPasswordEvent(
+      this.email, this.password, this.displayName);
+
+  @override
+  List<Object> get props => [email, password, displayName];
+}
+
+class SignInWithGoogleUsingEmailPasswordEvent extends AuthenticationEvent {
+  final String email;
+  final String password;
+  const SignInWithGoogleUsingEmailPasswordEvent(this.email, this.password);
 
   @override
   List<Object> get props => [email, password];
+}
+
+class LogoutEvent extends AuthenticationEvent {
+  const LogoutEvent();
+
+  @override
+  List<Object> get props => [];
 }

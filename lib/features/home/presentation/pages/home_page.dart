@@ -1,8 +1,7 @@
+import 'package:event_app/core/widgets/main_app_bar.dart';
 import 'package:event_app/core/widgets/main_bottom_bar.dart';
 import 'package:event_app/core/widgets/main_drawer.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,23 +16,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Eventify'),
-        actions: [
-          FirebaseAuth.instance.currentUser != null
-              ? IconButton(
-                  onPressed: () {
-                    context.goNamed('auth');
-                  },
-                  icon: const Icon(Icons.account_box_rounded),
-                )
-              : IconButton(
-                  onPressed: () {
-                    context.goNamed('auth');
-                  },
-                  icon: const Icon(Icons.login),
-                ),
-        ],
+      appBar: MainAppBar(
+        title: 'Eventify',
+        centerTitle: true,
+        automaticallyImplyLeading: true,
       ),
       drawer: const MainDrawer(),
       body: Center(

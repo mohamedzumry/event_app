@@ -27,10 +27,12 @@ class _MainAppBarState extends State<MainAppBar> {
     return AppBar(
       title: Text(widget.title),
       centerTitle: widget.centerTitle,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       leading: widget.leading,
-      elevation: 3,
+      elevation: 0,
       actions: widget.actions,
+      foregroundColor: Colors.white,
+      shape: BeveledRectangleBorder(),
       automaticallyImplyLeading: widget.automaticallyImplyLeading,
     );
   }

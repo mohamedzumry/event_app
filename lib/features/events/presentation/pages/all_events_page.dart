@@ -1,8 +1,10 @@
 import 'package:event_app/core/widgets/main_app_bar.dart';
+import 'package:event_app/core/widgets/main_bottom_bar.dart';
 import 'package:event_app/features/events/domain/entities/event.dart';
 import 'package:event_app/features/events/presentation/widgets/events_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AllEventsPage extends StatefulWidget {
   const AllEventsPage({super.key});
@@ -20,7 +22,14 @@ class _AllEventsPageState extends State<AllEventsPage> {
         title: 'All Events',
         automaticallyImplyLeading: false,
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () => context.goNamed('createEvent'),
+            icon: const Icon(Icons.create_rounded),
+          ),
+        ],
       ),
+      bottomNavigationBar: MainBottomBar(selectedIndex: 1),
       body: ListView(
         shrinkWrap: true,
         physics: AlwaysScrollableScrollPhysics(),

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,14 +20,16 @@ class _MainBottomBarState extends State<MainBottomBar> {
       } else if (index == 1) {
         context.goNamed('allEvents');
       } else if (index == 2) {
-        context.goNamed('profile');
+        FirebaseAuth.instance.currentUser != null
+            ? context.goNamed('profile')
+            : context.goNamed('signIn');
       }
     }
 
     return BottomNavigationBar(
       currentIndex: widget.selectedIndex,
       onTap: onItemTapped,
-      items: const <BottomNavigationBarItem>[
+      items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',
@@ -36,7 +39,9 @@ class _MainBottomBarState extends State<MainBottomBar> {
           label: 'Events',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.account_circle),
+          icon: FirebaseAuth.instance.currentUser != null
+              ? Icon(Icons.account_box_rounded)
+              : Icon(Icons.login),
           label: 'Profile',
         ),
       ],

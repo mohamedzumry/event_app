@@ -35,12 +35,6 @@ class MyApp extends StatelessWidget {
             primary: Colors.blue.shade900,
             secondary: Colors.blueAccent,
           ),
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.transparent,
-            foregroundColor: Colors.black,
-            shape: BeveledRectangleBorder(),
-            elevation: 3,
-          ),
         ),
       ),
     );

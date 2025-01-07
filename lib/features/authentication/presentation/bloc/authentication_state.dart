@@ -9,9 +9,23 @@ abstract class AuthenticationState extends Equatable {
 
 class AuthenticationInitial extends AuthenticationState {}
 
-class UserLoggedInState extends AuthenticationState {
+class GoogleLoginSuccessState extends AuthenticationState {
   final User user;
-  const UserLoggedInState({required this.user});
+  const GoogleLoginSuccessState({required this.user});
+  @override
+  List<Object> get props => [user];
+}
+
+class GoogleLoginFailedState extends AuthenticationState {
+  final String message;
+  const GoogleLoginFailedState({required this.message});
+  @override
+  List<Object> get props => [message];
+}
+
+class UserLoginSuccessState extends AuthenticationState {
+  final User user;
+  const UserLoginSuccessState({required this.user});
   @override
   List<Object> get props => [user];
 }
@@ -24,9 +38,10 @@ class UserLoginFailedState extends AuthenticationState {
 }
 
 class UserRegistrationSuccessState extends AuthenticationState {
-  const UserRegistrationSuccessState();
+  final User user;
+  const UserRegistrationSuccessState({required this.user});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [user];
 }
 
 class UserRegistrationFailedState extends AuthenticationState {

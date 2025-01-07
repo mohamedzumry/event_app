@@ -1,1 +1,28 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"mad-cw2-ku","appId":"1:107222566849:android:d6bd8fa33a5b998e0e9140","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"mad-cw2-ku","configurations":{"android":"1:107222566849:android:d6bd8fa33a5b998e0e9140"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "mad-cw2-ku",
+          "appId": "1:107222566849:android:d6bd8fa33a5b998e0e9140",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "mad-cw2-ku",
+          "configurations": {
+            "android": "1:107222566849:android:d6bd8fa33a5b998e0e9140"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  }
+}

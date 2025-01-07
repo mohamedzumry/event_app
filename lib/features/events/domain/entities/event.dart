@@ -1,5 +1,5 @@
 class Event {
-  final int? id;
+  final String? id;
   final String title;
   final String location;
   final String date;
@@ -22,4 +22,34 @@ class Event {
     required this.category,
     required this.description,
   });
+
+  factory Event.fromJson(Map<String, dynamic> json) {
+    return Event(
+      id: json['id'],
+      title: json['title'],
+      location: json['location'],
+      date: json['date'],
+      time: json['time'],
+      organizerId: json['organizerId'],
+      organizerName: json['organizerName'],
+      thumbnail: json['thumbnail'],
+      category: json['category'],
+      description: json['description'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'location': location,
+      'date': date,
+      'time': time,
+      'organizerId': organizerId,
+      'organizerName': organizerName,
+      'thumbnail': thumbnail,
+      'category': category,
+      'description': description,
+    };
+  }
 }

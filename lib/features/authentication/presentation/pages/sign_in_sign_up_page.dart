@@ -1,3 +1,4 @@
+import 'package:event_app/core/widgets/main_app_bar.dart';
 import 'package:event_app/core/widgets/main_bottom_bar.dart';
 import 'package:event_app/features/authentication/presentation/bloc/authentication_bloc.dart';
 import 'package:flutter/material.dart';
@@ -63,30 +64,62 @@ class SignInSignUpPage extends StatelessWidget {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Sign In / Sign Up')),
+        appBar: MainAppBar(
+          title: 'Sign In / Sign Up',
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+        ),
         bottomNavigationBar: MainBottomBar(selectedIndex: 2),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextField(
                 controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(
+                    labelText: 'Email', border: OutlineInputBorder()),
               ),
+              const SizedBox(height: 10),
               TextField(
                 controller: _passwordController,
-                decoration: const InputDecoration(labelText: 'Password'),
+                decoration: const InputDecoration(
+                    labelText: 'Password', border: OutlineInputBorder()),
                 obscureText: true,
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => context.read<AuthenticationBloc>().add(
-                      const SignUpWithGoogleUsingEmailPasswordEvent(
-                        'email',
-                        'password',
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: MaterialButton(
+                  color: Colors.teal[100],
+                  elevation: 10,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 30.0,
+                        width: 30.0,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image:
+                                  AssetImage('assets/images/google-logo.png'),
+                              fit: BoxFit.cover),
+                          shape: BoxShape.circle,
+                        ),
                       ),
-                    ),
-                child: const Text('Sign Up with Email & Password'),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text("Sign Up with Email & Password")
+                    ],
+                  ),
+                  onPressed: () => context.read<AuthenticationBloc>().add(
+                        const SignUpWithGoogleUsingEmailPasswordEvent(
+                          'email',
+                          'password',
+                        ),
+                      ),
+                ),
               ),
               const SizedBox(height: 10),
               const Text(

@@ -14,6 +14,8 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // form key
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       bloc: BlocProvider.of<AuthenticationBloc>(context),
       listener: (context, state) {
@@ -47,107 +49,128 @@ class SignInPage extends StatelessWidget {
         bottomNavigationBar: MainBottomBar(selectedIndex: 2),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                    labelText: 'Email', border: OutlineInputBorder()),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                    labelText: 'Password', border: OutlineInputBorder()),
-                obscureText: true,
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: MaterialButton(
-                  color: Colors.teal[100],
-                  elevation: 10,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 30.0,
-                        width: 30.0,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage('assets/images/sign-in.png'),
-                              fit: BoxFit.cover),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Text("Sign In with Email & Password")
-                    ],
-                  ),
-                  onPressed: () => context.read<AuthenticationBloc>().add(
-                        SignInWithGoogleUsingEmailPasswordEvent(
-                          _emailController.text,
-                          _passwordController.text,
-                        ),
-                      ),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                      labelText: 'Email', border: OutlineInputBorder()),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Email is required';
+                    } else if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                        .hasMatch(value)) {
+                      return ("Please enter a valid email");
+                    }
+                    return null;
+                  },
                 ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                "OR",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: MaterialButton(
-                  color: Colors.teal[100],
-                  elevation: 10,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 30.0,
-                        width: 30.0,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image:
-                                  AssetImage('assets/images/google-logo.png'),
-                              fit: BoxFit.cover),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Text("Sign In with Google")
-                    ],
-                  ),
-                  onPressed: () => context.read<AuthenticationBloc>().add(
-                        const SignInWithGoogleEvent(),
-                      ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: _passwordController,
+                  keyboardType: TextInputType.visiblePassword,
+                  decoration: const InputDecoration(
+                      labelText: 'Password', border: OutlineInputBorder()),
+                  obscureText: true,
+                  validator: (value) =>
+                      value!.isEmpty ? 'Password is required' : null,
                 ),
-              ),
-              const SizedBox(height: 20),
-              RichText(
-                text: TextSpan(
-                  text: 'Already have an account? ',
-                  style: const TextStyle(color: Colors.black),
-                  children: [
-                    TextSpan(
-                      text: 'Sign Up',
-                      style: const TextStyle(
-                          color: Colors.teal, fontWeight: FontWeight.bold),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => context.goNamed('signUp'),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: MaterialButton(
+                      color: Colors.teal[100],
+                      elevation: 10,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 30.0,
+                            width: 30.0,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image:
+                                      AssetImage('assets/images/sign-in.png'),
+                                  fit: BoxFit.cover),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text("Sign In with Email & Password")
+                        ],
+                      ),
+                      onPressed: () {
+                        // if validated
+                        if (formKey.currentState!.validate()) {
+                          context.read<AuthenticationBloc>().add(
+                                SignInWithGoogleUsingEmailPasswordEvent(
+                                  _emailController.text,
+                                  _passwordController.text,
+                                ),
+                              );
+                        }
+                      }),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  "OR",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: MaterialButton(
+                    color: Colors.teal[100],
+                    elevation: 10,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 30.0,
+                          width: 30.0,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image:
+                                    AssetImage('assets/images/google-logo.png'),
+                                fit: BoxFit.cover),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Text("Sign In with Google")
+                      ],
                     ),
-                  ],
+                    onPressed: () => context.read<AuthenticationBloc>().add(
+                          const SignInWithGoogleEvent(),
+                        ),
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                RichText(
+                  text: TextSpan(
+                    text: 'Already have an account? ',
+                    style: const TextStyle(color: Colors.black),
+                    children: [
+                      TextSpan(
+                        text: 'Sign Up',
+                        style: const TextStyle(
+                            color: Colors.teal, fontWeight: FontWeight.bold),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => context.goNamed('signUp'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -30,14 +30,24 @@ class _CreateEventPageState extends State<CreateEventPage> {
   File? _image;
   final ImagePicker _picker = ImagePicker();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool _isLoading = false;
 
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       final File imageFile = File(pickedFile.path);
       final storageService = StorageService();
+
+      setState(() {
+        _isLoading = true;
+      });
+
       final tempThumbnailUrl =
           await storageService.uploadEventThumbnail(imageFile);
+
+      setState(() {
+        _isLoading = false;
+      });
 
       if (tempThumbnailUrl != null) {
         setState(() {
@@ -45,11 +55,20 @@ class _CreateEventPageState extends State<CreateEventPage> {
           thumbnailUrl = tempThumbnailUrl;
         });
       } else {
-        debugPrint("Failed to upload image");
+        showMessage('Failed to upload image');
       }
     } else {
-      debugPrint("No image selected");
+      setState(() {
+        _isLoading = false;
+      });
+      showMessage('No image selected');
     }
+  }
+
+  void showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -80,148 +99,184 @@ class _CreateEventPageState extends State<CreateEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MainAppBar(
-        title: 'Create Event',
-        automaticallyImplyLeading: true,
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                controller: _titleController,
-                decoration: InputDecoration(
-                  labelText: 'Title',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter title';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _locationController,
-                decoration: InputDecoration(
-                  labelText: 'Location',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter location';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _dateController,
-                decoration: InputDecoration(
-                  labelText: 'Date',
-                  border: OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.calendar_today),
-                    onPressed: () {
-                      _selectDate(context);
-                    },
+    void closeImageLoadingDialog() {
+      context.pop();
+    }
+
+    showImageLoadingDialog() {
+      return showDialog(
+        context: context,
+        builder: (context) => Center(
+          child: CircularProgressIndicator(),
+        ),
+      ).then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+
+    return BlocListener<EventsBloc, EventsState>(
+      bloc: context.read<EventsBloc>(),
+      listener: (context, state) {
+        if (state is EventSuccessfullyCreated) {
+          context.goNamed('myEvents');
+        }
+      },
+      child: Scaffold(
+        appBar: MainAppBar(
+          title: 'Create Event',
+          automaticallyImplyLeading: true,
+          centerTitle: true,
+        ),
+        body: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                TextFormField(
+                  controller: _titleController,
+                  decoration: InputDecoration(
+                    labelText: 'Title',
+                    border: OutlineInputBorder(),
                   ),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please select a date';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _timeController,
-                decoration: InputDecoration(
-                  labelText: 'Time',
-                  border: OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.access_time),
-                    onPressed: () {
-                      _selectTime(context);
-                    },
-                  ),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please select a time';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _categoryController,
-                decoration: InputDecoration(
-                  labelText: 'Category',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter category';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _descriptionController,
-                decoration: InputDecoration(
-                  labelText: 'Description',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter description';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 10),
-              GestureDetector(
-                onTap: _pickImage,
-                child: _image != null
-                    ? Image.file(_image!)
-                    : Container(
-                        color: Colors.grey[200],
-                        height: 150,
-                        child: Icon(Icons.add_a_photo, color: Colors.grey[800]),
-                      ),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    if (thumbnailUrl != null) {
-                      final User? user = _auth.currentUser;
-                      final event = Event(
-                        title: _titleController.text,
-                        location: _locationController.text,
-                        date: _dateController.text,
-                        time: _timeController.text,
-                        organizerId: user?.uid ?? 'N/A',
-                        organizerName: user?.displayName ?? 'N/A',
-                        thumbnail: thumbnailUrl!,
-                        category: _categoryController.text,
-                        description: _descriptionController.text,
-                      );
-                      context.read<EventsBloc>().add(CreateEventEvent(event));
-                      context.pop();
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Failed to upload image')),
-                      );
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter title';
                     }
-                  }
-                },
-                child: Text('Create Event'),
-              ),
-            ],
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: _locationController,
+                  decoration: InputDecoration(
+                    labelText: 'Location',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter location';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: _dateController,
+                  decoration: InputDecoration(
+                    labelText: 'Date',
+                    border: OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.calendar_today),
+                      onPressed: () {
+                        _selectDate(context);
+                      },
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please select a date';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: _timeController,
+                  decoration: InputDecoration(
+                    labelText: 'Time',
+                    border: OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.access_time),
+                      onPressed: () {
+                        _selectTime(context);
+                      },
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please select a time';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: _categoryController,
+                  decoration: InputDecoration(
+                    labelText: 'Category',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter category';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: _descriptionController,
+                  decoration: InputDecoration(
+                    labelText: 'Description',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter description';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16.0),
+                GestureDetector(
+                  onTap: () async {
+                    _isLoading = true;
+                    if (_isLoading) showImageLoadingDialog();
+                    await _pickImage();
+                    if (!_isLoading) closeImageLoadingDialog();
+                  },
+                  child: _image != null
+                      ? Image.file(_image!)
+                      : Container(
+                          color: Colors.grey[200],
+                          height: 150,
+                          child:
+                              Icon(Icons.add_a_photo, color: Colors.grey[800]),
+                        ),
+                ),
+                SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      if (thumbnailUrl != null) {
+                        final User? user = _auth.currentUser;
+                        final event = Event(
+                          title: _titleController.text,
+                          location: _locationController.text,
+                          date: _dateController.text,
+                          time: _timeController.text,
+                          organizerId: user?.uid ?? 'N/A',
+                          organizerName: user?.displayName ?? 'N/A',
+                          thumbnail: thumbnailUrl!,
+                          category: _categoryController.text,
+                          description: _descriptionController.text,
+                        );
+                        context.read<EventsBloc>().add(CreateEventEvent(event));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Failed to upload image')),
+                        );
+                      }
+                    }
+                  },
+                  child: Text('Create Event'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -40,3 +40,19 @@ class LogoutEvent extends AuthenticationEvent {
   @override
   List<Object> get props => [];
 }
+
+class UpdateDisplayNameEvent extends AuthenticationEvent {
+  final String displayName;
+  const UpdateDisplayNameEvent(this.displayName);
+
+  @override
+  List<Object> get props => [displayName];
+}
+
+class UpdatePasswordEvent extends AuthenticationEvent {
+  final String password;
+  const UpdatePasswordEvent(this.password);
+
+  @override
+  List<Object> get props => [password];
+}

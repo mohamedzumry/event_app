@@ -48,3 +48,11 @@ class UpdateDisplayNameEvent extends AuthenticationEvent {
   @override
   List<Object> get props => [displayName];
 }
+
+class UpdatePasswordEvent extends AuthenticationEvent {
+  final String password;
+  const UpdatePasswordEvent(this.password);
+
+  @override
+  List<Object> get props => [password];
+}

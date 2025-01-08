@@ -39,122 +39,61 @@ class _ProfilePageState extends State<ProfilePage> {
           automaticallyImplyLeading: true,
         ),
         bottomNavigationBar: MainBottomBar(selectedIndex: 2),
-        body: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //Profile Picture
-              Center(
-                child: Container(
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                        color: Color(ColorsConfig().greyBlue), width: 2.5),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: CircleAvatar(
-                      backgroundColor: Color(0xFFD4D4D4),
-                      minRadius: 49,
-                      child: ClipOval(
-                        child: Image(
-                          fit: BoxFit.fill,
-                          image: user != null
-                              ? user.photoURL != null
-                                  ? NetworkImage(user.photoURL!)
-                                  : AssetImage('assets/images/dp.jpeg')
-                              : AssetImage('assets/images/dp.jpeg'),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //Profile Picture
+                Center(
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          color: Color(ColorsConfig().greyBlue), width: 2.5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: CircleAvatar(
+                        backgroundColor: Color(0xFFD4D4D4),
+                        minRadius: 49,
+                        child: ClipOval(
+                          child: Image(
+                            fit: BoxFit.fill,
+                            image: user != null
+                                ? user.photoURL != null
+                                    ? NetworkImage(user.photoURL!)
+                                    : AssetImage('assets/images/dp.jpeg')
+                                : AssetImage('assets/images/dp.jpeg'),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Text('Tap on the name to change',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0x80000000),
-                    )),
-              ),
-
-              AccountDetailsCard(
-                title: 'Name',
-                dataField: user != null
-                    ? user.displayName != null
-                        ? user.displayName!
-                        : ''
-                    : '',
-                onTap: () {
-                  showModalBottomSheet(
-                      isScrollControlled: true,
-                      backgroundColor: Colors.white,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(25.0),
-                        ),
-                      ),
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SizedBox(
-                          height: MediaQuery.of(context).viewInsets.bottom +
-                              MediaQuery.of(context).size.height * 0.4,
-                          child: UsernameChangeBottomSheet(
-                              displayName: user != null
-                                  ? user.displayName != null
-                                      ? user.displayName!
-                                      : ''
-                                  : ''),
-                        );
-                      });
-                },
-              ),
-
-              AccountDetailsCard(
-                title: 'Email',
-                //setting the dataField to a hardcoded value for now to avoid errors
-                dataField: user != null
-                    ? user.email != null
-                        ? user.email!
-                        : ''
-                    : '',
-                onTap: () {},
-              ),
-
-              const SizedBox(height: 20),
-
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  style: ButtonStyle(
-                    backgroundColor:
-                        WidgetStatePropertyAll(Colors.blue.shade900),
-                    foregroundColor: WidgetStatePropertyAll(Colors.white),
-                  ),
-                  icon: Icon(Icons.event_available_sharp),
-                  onPressed: () => context.goNamed('myEvents'),
-                  label: Text('My Events',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Text('Tap on the name to change',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0x80000000),
                       )),
                 ),
-              ),
 
-              const SizedBox(height: 20),
-
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  icon: Icon(Icons.password),
-                  onPressed: (() {
+                AccountDetailsCard(
+                  title: 'Name',
+                  dataField: user != null
+                      ? user.displayName != null
+                          ? user.displayName!
+                          : ''
+                      : '',
+                  onTap: () {
                     showModalBottomSheet(
                         isScrollControlled: true,
                         backgroundColor: Colors.white,
@@ -166,36 +105,98 @@ class _ProfilePageState extends State<ProfilePage> {
                         context: context,
                         builder: (BuildContext context) {
                           return SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.86,
-                            child: PasswordChangeBottomSheet(),
+                            height: MediaQuery.of(context).viewInsets.bottom +
+                                MediaQuery.of(context).size.height * 0.4,
+                            child: UsernameChangeBottomSheet(
+                                displayName: user != null
+                                    ? user.displayName != null
+                                        ? user.displayName!
+                                        : ''
+                                    : ''),
                           );
                         });
-                  }),
-                  label: Text('Change Password',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      )),
+                  },
                 ),
-              ),
 
-              const SizedBox(height: 20),
+                AccountDetailsCard(
+                  title: 'Email',
+                  //setting the dataField to a hardcoded value for now to avoid errors
+                  dataField: user != null
+                      ? user.email != null
+                          ? user.email!
+                          : ''
+                      : '',
+                  onTap: () {},
+                ),
 
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  icon: Icon(Icons.logout),
-                  onPressed: () => context.read<AuthenticationBloc>().add(
-                        LogoutEvent(),
+                const SizedBox(height: 20),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          WidgetStatePropertyAll(Colors.blue.shade900),
+                      foregroundColor: WidgetStatePropertyAll(Colors.white),
+                    ),
+                    icon: Icon(Icons.event_available_sharp),
+                    onPressed: () => context.goNamed('myEvents'),
+                    label: Text('My Events',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        )),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                for (var userinfo in user!.providerData)
+                  if (userinfo.providerId == 'password')
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        icon: Icon(Icons.password),
+                        onPressed: (() {
+                          showModalBottomSheet(
+                              isScrollControlled: true,
+                              backgroundColor: Colors.white,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(25.0),
+                                ),
+                              ),
+                              context: context,
+                              builder: (BuildContext context) {
+                                return PasswordChangeBottomSheet();
+                              });
+                        }),
+                        label: Text('Change Password',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            )),
                       ),
-                  label: Text('Sign Out',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      )),
+                    ),
+
+                const SizedBox(height: 20),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    icon: Icon(Icons.logout),
+                    onPressed: () => context.read<AuthenticationBloc>().add(
+                          LogoutEvent(),
+                        ),
+                    label: Text('Sign Out',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        )),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

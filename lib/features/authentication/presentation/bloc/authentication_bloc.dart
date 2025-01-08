@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,6 +26,7 @@ class AuthenticationBloc
           signInWithGoogleUsingEmailPasswordEvent);
       on<LogoutEvent>(logoutEvent);
       on<UpdateDisplayNameEvent>(updateDisplayNameEvent);
+      on<UpdatePasswordEvent>(updatePasswordEvent);
     });
   }
 
@@ -130,6 +132,26 @@ class AuthenticationBloc
     } catch (e) {
       emit(UserDisplayNameUpdateFailedState(
           message: 'Failed to update display name'));
+    }
+  }
+
+  FutureOr<void> updatePasswordEvent(
+      UpdatePasswordEvent event, Emitter<AuthenticationState> emit) {
+    debugPrint(event.password);
+    try {
+      FirebaseAuth.instance.currentUser?.updatePassword(event.password);
+      emit(UserPasswordUpdatedState());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        emit(UserPasswordUpdateFailedState(
+            message: 'The password provided is too weak.'));
+      } else if (e.code == 'requires-recent-login') {
+        emit(UserPasswordUpdateFailedState(
+            message:
+                'The user must reauthenticate before this operation can be executed.'));
+      }
+    } catch (e) {
+      emit(UserPasswordUpdateFailedState(message: 'Failed to update password'));
     }
   }
 }

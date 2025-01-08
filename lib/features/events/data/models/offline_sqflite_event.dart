@@ -4,7 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
 class OfflineSqfliteEvent {
-  final String? id;
+  final int? id;
+  final String? onlineEventId;
   final String title;
   final String location;
   final String date;
@@ -17,6 +18,7 @@ class OfflineSqfliteEvent {
 
   OfflineSqfliteEvent({
     this.id,
+    this.onlineEventId,
     required this.title,
     required this.location,
     required this.date,
@@ -30,6 +32,7 @@ class OfflineSqfliteEvent {
 
   Map<String, dynamic> toMap() {
     return {
+      'onlineEventId': onlineEventId,
       'title': title,
       'location': location,
       'date': date,
@@ -45,6 +48,7 @@ class OfflineSqfliteEvent {
   factory OfflineSqfliteEvent.fromMap(Map<String, dynamic> map) {
     return OfflineSqfliteEvent(
       id: map['id'],
+      onlineEventId: map['onlineEventId'],
       title: map['title'],
       location: map['location'],
       date: map['date'],
@@ -54,21 +58,6 @@ class OfflineSqfliteEvent {
       thumbnail: map['thumbnail'],
       category: map['category'],
       description: map['description'],
-    );
-  }
-
-  Event toDomain() {
-    return Event(
-      id: id,
-      title: title,
-      location: location,
-      date: date,
-      time: time,
-      organizerId: organizerId,
-      organizerName: organizerName,
-      thumbnail: thumbnail,
-      category: category,
-      description: description,
     );
   }
 
@@ -84,7 +73,7 @@ class OfflineSqfliteEvent {
 
   static Future<OfflineSqfliteEvent> fromDomain(Event event) async {
     final instance = OfflineSqfliteEvent(
-      id: event.id,
+      onlineEventId: event.id,
       title: event.title,
       location: event.location,
       date: event.date,
@@ -98,7 +87,7 @@ class OfflineSqfliteEvent {
     final localThumbnailPath =
         await instance.saveImageToLocalStorage(event.thumbnail);
     return OfflineSqfliteEvent(
-      id: event.id,
+      onlineEventId: event.id,
       title: event.title,
       location: event.location,
       date: event.date,

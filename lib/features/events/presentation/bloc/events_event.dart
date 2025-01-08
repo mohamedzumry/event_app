@@ -58,7 +58,7 @@ class SaveOfflineEventEvent extends EventsEvent {
 }
 
 class DeleteOfflineEventEvent extends EventsEvent {
-  final String eventId;
+  final int eventId;
   const DeleteOfflineEventEvent(this.eventId);
 
   @override

@@ -24,8 +24,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final currentDate = DateTime.now();
 
       final latestEventsList = allEvents
-        ..sort(
-            (a, b) => DateTime.parse(b.date).compareTo(DateTime.parse(a.date)))
+        // ..sort(
+        //     (a, b) => DateTime.parse(b.date).compareTo(DateTime.parse(a.date)))
         ..take(10).toList();
 
       final upcomingEventsList = allEvents

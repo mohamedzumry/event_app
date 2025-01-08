@@ -1,34 +1,24 @@
+import 'dart:io';
+
 import 'package:event_app/core/widgets/main_app_bar.dart';
-import 'package:event_app/features/events/domain/entities/event.dart';
+import 'package:event_app/features/events/domain/entities/offline_event.dart';
 import 'package:event_app/features/events/presentation/bloc/events_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
-class EventDetailsPage extends StatelessWidget {
-  final Event event;
-  const EventDetailsPage({super.key, required this.event});
-
-  bool isCurrentUserOrganizer(Event event) {
-    final User? currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      return event.organizerId == currentUser.uid;
-    } else {
-      return false;
-    }
-  }
+class OfflineEventDetailsPage extends StatelessWidget {
+  final OfflineEvent event;
+  const OfflineEventDetailsPage({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<EventsBloc, EventsState>(
       bloc: context.read<EventsBloc>(),
       listener: (context, state) {
-        if (state is OfflineEventSavedSuccessfullyState) {
+        if (state is OfflineEventDeletedSuccessfullyState) {
           context.read<EventsBloc>().add(LoadOfflineEventsEvent());
           context.goNamed('savedEvents');
-        } else if (state is EventDeletedSuccessfullyState) {
-          context.goNamed('myEvents');
         }
       },
       child: Scaffold(
@@ -36,43 +26,34 @@ class EventDetailsPage extends StatelessWidget {
         appBar: MainAppBar(
           title: event.title,
           automaticallyImplyLeading: true,
-          actions: isCurrentUserOrganizer(event)
-              ? [
-                  IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () => context.goNamed('createEvent', extra: {
-                      'event': event,
-                      'isEditable': true,
-                    }),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Delete Event'),
+                    content:
+                        Text('Are you sure you want to delete this event?'),
+                    actions: [
+                      TextButton(
+                        child: Text('Cancel'),
+                        onPressed: () => context.pop(),
+                      ),
+                      TextButton(
+                          child: Text('Delete'),
+                          onPressed: () {
+                            context
+                                .read<EventsBloc>()
+                                .add(DeleteOfflineEventEvent(event.id!));
+                          })
+                    ],
                   ),
-                  IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text('Delete Event'),
-                          content: Text(
-                              'Are you sure you want to delete this event?'),
-                          actions: [
-                            TextButton(
-                              child: Text('Cancel'),
-                              onPressed: () => context.pop(),
-                            ),
-                            TextButton(
-                                child: Text('Delete'),
-                                onPressed: () {
-                                  context
-                                      .read<EventsBloc>()
-                                      .add(DeleteEvent(event.id!));
-                                })
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ]
-              : [],
+                );
+              },
+            ),
+          ],
         ),
         body: Stack(
           children: [
@@ -84,7 +65,7 @@ class EventDetailsPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image(
-                      image: NetworkImage(event.thumbnail),
+                      image: FileImage(File(event.thumbnailPath)),
                       height: 300,
                       fit: BoxFit.fill,
                       width: double.infinity,
@@ -165,29 +146,6 @@ class EventDetailsPage extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (FirebaseAuth.instance.currentUser != null) {
-                      context
-                          .read<EventsBloc>()
-                          .add(SaveOfflineEventEvent(event));
-                    } else {
-                      context.goNamed('signIn');
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size.fromHeight(50),
-                    backgroundColor: Colors.blue.shade900,
-                    foregroundColor: Colors.white,
-                  ),
-                  child: Text('Save Event'),
                 ),
               ),
             ),

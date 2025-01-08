@@ -1,7 +1,7 @@
 import 'package:event_app/core/widgets/main_app_bar.dart';
 import 'package:event_app/core/widgets/main_bottom_bar.dart';
 import 'package:event_app/features/events/presentation/bloc/events_bloc.dart';
-import 'package:event_app/features/events/presentation/widgets/events_card.dart';
+import 'package:event_app/features/events/presentation/widgets/offline_event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,13 +13,6 @@ class SavedEventsPage extends StatefulWidget {
 }
 
 class _SavedEventsPageState extends State<SavedEventsPage> {
-  @override
-  void initState() {
-    context.read<EventsBloc>().add(LoadOfflineEventsEvent());
-
-    super.initState();
-  }
-
   @override
   void didChangeDependencies() {
     context.read<EventsBloc>().add(LoadOfflineEventsEvent());
@@ -50,11 +43,13 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
               itemCount: events.length,
               itemBuilder: (context, index) {
                 final event = events[index];
-                return EventCard(
+                return OfflineEventCard(
                   event: event,
                 );
               },
             );
+          } else if (state is OfflineEventsLoadFailureState) {
+            return Center(child: Text(state.message));
           } else {
             return Center(child: Text('Failed to load events.'));
           }

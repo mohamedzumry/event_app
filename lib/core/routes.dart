@@ -1,10 +1,12 @@
 import 'package:event_app/features/authentication/presentation/pages/sign_in_page.dart';
 import 'package:event_app/features/authentication/presentation/pages/sign_up_page.dart';
 import 'package:event_app/features/events/domain/entities/event.dart';
+import 'package:event_app/features/events/domain/entities/offline_event.dart';
 import 'package:event_app/features/events/presentation/pages/all_events_page.dart';
 import 'package:event_app/features/events/presentation/pages/create_event_page.dart';
 import 'package:event_app/features/events/presentation/pages/event_details_page.dart';
 import 'package:event_app/features/events/presentation/pages/my_events_page.dart';
+import 'package:event_app/features/events/presentation/pages/offline_event_details_page.dart';
 import 'package:event_app/features/events/presentation/pages/saved_events_page.dart';
 import 'package:event_app/features/home/presentation/pages/home_page.dart';
 import 'package:event_app/features/profile/presentation/pages/profile_page.dart';
@@ -49,6 +51,19 @@ class EventifyRouter {
             pageBuilder: (context, state) {
               return MaterialPage(child: SavedEventsPage());
             },
+            routes: <RouteBase>[
+              GoRoute(
+                name: 'offlineEventDetails',
+                path: '/offline-event-details',
+                pageBuilder: (context, state) {
+                  final OfflineEvent event = state.extra as OfflineEvent;
+                  return MaterialPage(
+                      child: OfflineEventDetailsPage(
+                    event: event,
+                  ));
+                },
+              )
+            ],
           ),
           GoRoute(
             name: 'myEvents',

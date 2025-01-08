@@ -1,5 +1,6 @@
 class OfflineEvent {
-  final String? id;
+  final int? id;
+  final String? onlineEventId;
   final String title;
   final String description;
   final String location;
@@ -12,6 +13,7 @@ class OfflineEvent {
 
   OfflineEvent({
     this.id,
+    this.onlineEventId,
     required this.title,
     required this.description,
     required this.location,

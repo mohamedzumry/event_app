@@ -39,6 +39,12 @@ class EventSuccessfullyCreated extends EventsState {
   List<Object> get props => [event];
 }
 
+class EventDeletedSuccessfullyState extends EventsState {
+  const EventDeletedSuccessfullyState();
+
+  @override
+  List<Object> get props => [];
+}
 // Offline Event States
 
 class OfflineEventSavedSuccessfullyState extends EventsState {
@@ -70,7 +76,7 @@ class OfflineEventDeletionFailureState extends EventsState {
 }
 
 class OfflineEventsLoadedSuccessfullyState extends EventsState {
-  final List<Event> offlineEvents;
+  final List<OfflineEvent> offlineEvents;
   const OfflineEventsLoadedSuccessfullyState({required this.offlineEvents});
 
   @override
@@ -78,8 +84,9 @@ class OfflineEventsLoadedSuccessfullyState extends EventsState {
 }
 
 class OfflineEventsLoadFailureState extends EventsState {
-  const OfflineEventsLoadFailureState();
+  final String message;
+  const OfflineEventsLoadFailureState({required this.message});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [message];
 }

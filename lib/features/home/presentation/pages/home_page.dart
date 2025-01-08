@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_app/core/widgets/main_app_bar.dart';
 import 'package:event_app/core/widgets/main_bottom_bar.dart';
 import 'package:event_app/features/events/presentation/widgets/events_card.dart';
@@ -18,7 +19,6 @@ class _HomePageState extends State<HomePage> {
   final CarouselSliderController _carouselController =
       CarouselSliderController();
   final int _selectedIndex = 0;
-  int _selectedCarouselIndex = 0;
 
   @override
   void initState() {
@@ -46,61 +46,59 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    alignment: Alignment.centerLeft,
-                    child: Text('Latest 10 Events',
-                        style: Theme.of(context).textTheme.headlineSmall),
-                  ),
-                  const SizedBox(height: 10),
-                  CarouselSlider(
-                    items: latestEvents
-                        .map((event) => EventCarouselTile(event: event))
-                        .toList(),
-                    carouselController: _carouselController,
-                    options: CarouselOptions(
-                      height: MediaQuery.of(context).size.height * 0.42,
-                      autoPlay: false,
-                      enableInfiniteScroll: false,
-                      enlargeCenterPage: false,
-                      viewportFraction: 0.9,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          _selectedCarouselIndex = index;
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: latestEvents.asMap().entries.map((entry) {
-                      return Container(
-                        width: 7.0,
-                        height: 7.0,
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 4.0),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: (Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.white
-                                  : Colors.black)
-                              .withOpacity(_selectedCarouselIndex == entry.key
-                                  ? 0.9
-                                  : 0.4),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    alignment: Alignment.centerLeft,
-                    child: Text('Upcoming 10 Events',
-                        style: Theme.of(context).textTheme.headlineSmall),
-                  ),
+                  StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('events')
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else if (!snapshot.hasData) {
+                          return Text('No data available.');
+                        } else {
+                          return CarouselSlider.builder(
+                              itemCount: latestEvents.length,
+                              options: CarouselOptions(
+                                height: 400,
+                                aspectRatio: 16 / 9,
+                                viewportFraction: 0.8,
+                                initialPage: 0,
+                                enableInfiniteScroll: false,
+                                reverse: false,
+                                autoPlay: true,
+                                autoPlayInterval: const Duration(seconds: 10),
+                                autoPlayAnimationDuration:
+                                    const Duration(milliseconds: 1600),
+                                autoPlayCurve: Curves.fastOutSlowIn,
+                                enlargeCenterPage: true,
+                                scrollDirection: Axis.horizontal,
+                                // onPageChanged: (index, reason) {
+                                //   setState(() {
+                                //     _carouselController.jumpToPage(index);
+                                //   });
+                                // },
+                              ),
+                              carouselController: _carouselController,
+                              itemBuilder: (context, index, realIndex) {
+                                final event = latestEvents[index];
+                                return EventCarouselTile(event: event);
+                              });
+                        }
+                      }),
                   const SizedBox(height: 16),
+                  // Upcoming Events
+                  Text(
+                    'Upcoming Events',
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline),
+                  ),
+                  const SizedBox(height: 20),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),

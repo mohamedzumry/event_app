@@ -1,14 +1,16 @@
-import 'package:event_app/features/events/domain/entities/event.dart';
+import 'dart:io';
+
+import 'package:event_app/features/events/domain/entities/offline_event.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class EventCard extends StatelessWidget {
-  final Event event;
-  const EventCard({super.key, required this.event});
+class OfflineEventCard extends StatelessWidget {
+  final OfflineEvent event;
+  const OfflineEventCard({super.key, required this.event});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.pushNamed('eventDetails', extra: event),
+      onTap: () => context.pushNamed('offlineEventDetails', extra: event),
       child: Card(
         margin: EdgeInsets.all(10),
         child: ListTile(
@@ -17,7 +19,7 @@ class EventCard extends StatelessWidget {
           leading: SizedBox(
             width: 75,
             height: 75,
-            child: Image(image: NetworkImage(event.thumbnail)),
+            child: Image.file(File(event.thumbnailPath)),
           ),
           title: Text(
             event.title,

@@ -7,7 +7,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
   static Database? _database;
   static const _databaseName = 'eventify.db';
-  static const _databaseVersion = 1;
+  static const _databaseVersion = 2;
 
   DatabaseHelper._privateConstructor();
 
@@ -27,6 +27,7 @@ class DatabaseHelper {
         await db.execute('''
           CREATE TABLE IF NOT EXISTS offline_events (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            onlineEventId TEXT NOT NULL,
             title TEXT NOT NULL,
             location TEXT NOT NULL,
             date TEXT NOT NULL,

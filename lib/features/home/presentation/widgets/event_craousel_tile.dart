@@ -13,7 +13,7 @@ class EventCarouselTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.goNamed('eventDetails', extra: event),
+      onTap: () => context.pushNamed('eventDetails', extra: event),
       child: Card(
         color: Colors.white,
         shape: RoundedRectangleBorder(

@@ -7,24 +7,17 @@ abstract class EventsEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class EventLoad extends EventsEvent {
-  const EventLoad();
-
-  @override
-  List<Object> get props => [];
-}
-
-class CreateEvent extends EventsEvent {
+class CreateEventEvent extends EventsEvent {
   final Event event;
-  const CreateEvent(this.event);
+  const CreateEventEvent(this.event);
 
   @override
   List<Object> get props => [event];
 }
 
-class UpdateEvent extends EventsEvent {
+class UpdateEventEvent extends EventsEvent {
   final Event event;
-  const UpdateEvent(this.event);
+  const UpdateEventEvent(this.event);
 
   @override
   List<Object> get props => [event];
@@ -36,4 +29,19 @@ class DeleteEvent extends EventsEvent {
 
   @override
   List<Object> get props => [eventId];
+}
+
+class LoadEventsEvent extends EventsEvent {
+  const LoadEventsEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class LoadEventsByUserEvent extends EventsEvent {
+  final String userId;
+  const LoadEventsByUserEvent(this.userId);
+
+  @override
+  List<Object> get props => [userId];
 }

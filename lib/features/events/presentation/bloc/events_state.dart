@@ -16,4 +16,25 @@ class EventLoadSuccess extends EventsState {
   const EventLoadSuccess(this.events);
 }
 
-class EventOperationFailure extends EventsState {}
+class EventLoadFailure extends EventsState {
+  final String message;
+  const EventLoadFailure({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+class EventCreationFailureState extends EventsState {
+  const EventCreationFailureState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class EventSuccessfullyCreated extends EventsState {
+  final Event event;
+  const EventSuccessfullyCreated(this.event);
+
+  @override
+  List<Object> get props => [event];
+}

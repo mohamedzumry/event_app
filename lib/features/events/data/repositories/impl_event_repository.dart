@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_app/features/events/domain/entities/event.dart';
 import 'package:event_app/features/events/domain/repositories/event_repository.dart';
 
-abstract class ImplEventRepository extends EventRepository {
+class ImplEventRepository extends EventRepository {
   final CollectionReference _eventCollection =
       FirebaseFirestore.instance.collection('events');
 
@@ -24,6 +24,18 @@ abstract class ImplEventRepository extends EventRepository {
   @override
   Stream<List<Event>> getEvents() {
     return _eventCollection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return Event.fromJson(doc.data() as Map<String, dynamic>);
+      }).toList();
+    });
+  }
+
+  @override
+  Stream<List<Event>> getEventsByUser(String userId) {
+    return _eventCollection
+        .where('organizerId', isEqualTo: userId)
+        .snapshots()
+        .map((snapshot) {
       return snapshot.docs.map((doc) {
         return Event.fromJson(doc.data() as Map<String, dynamic>);
       }).toList();

@@ -5,4 +5,5 @@ abstract class EventRepository {
   Future<void> updateEvent(Event event);
   Future<void> deleteEvent(String id);
   Stream<List<Event>> getEvents();
+  Stream<List<Event>> getEventsByUser(String userId);
 }

@@ -1,7 +1,7 @@
 import 'package:event_app/core/widgets/main_app_bar.dart';
 import 'package:event_app/core/widgets/main_bottom_bar.dart';
 import 'package:event_app/features/events/domain/entities/event.dart';
-import 'package:event_app/features/events/presentation/widgets/events_card.dart';
+import 'package:event_app/features/events/presentation/widgets/events_temp_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -24,8 +24,8 @@ class _AllEventsPageState extends State<AllEventsPage> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () => context.goNamed('createEvent'),
-            icon: const Icon(Icons.create_rounded),
+            onPressed: () => context.goNamed('myEvents'),
+            icon: const Icon(Icons.event_note_rounded),
           ),
         ],
       ),
@@ -34,7 +34,7 @@ class _AllEventsPageState extends State<AllEventsPage> {
         shrinkWrap: true,
         physics: AlwaysScrollableScrollPhysics(),
         children: [
-          EventCard(
+          EventsTempCard(
             event: Event(
               title:
                   'Educational Workshops Event Educational Workshops Event Educational Workshops Event',

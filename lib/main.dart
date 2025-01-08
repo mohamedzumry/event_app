@@ -1,5 +1,7 @@
 import 'package:event_app/core/routes.dart';
 import 'package:event_app/features/authentication/presentation/bloc/authentication_bloc.dart';
+import 'package:event_app/features/events/data/repositories/impl_event_repository.dart';
+import 'package:event_app/features/events/presentation/bloc/events_bloc.dart';
 import 'package:event_app/features/home/presentation/bloc/home_bloc.dart';
 import 'package:event_app/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:event_app/firebase_options.dart';
@@ -25,6 +27,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => AuthenticationBloc()),
         BlocProvider(create: (context) => HomeBloc()),
         BlocProvider(create: (context) => ProfileBloc()),
+        BlocProvider(
+            create: (context) =>
+                EventsBloc(eventRepository: ImplEventRepository())),
       ],
       child: MaterialApp.router(
         routerConfig: EventifyRouter().router,

@@ -1,22 +1,15 @@
 import 'package:event_app/features/events/domain/entities/event.dart';
 import 'package:flutter/material.dart';
 
-class EventCard extends StatelessWidget {
+class EventsTempCard extends StatelessWidget {
   final Event event;
-  const EventCard({super.key, required this.event});
+  const EventsTempCard({super.key, required this.event});
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.all(10),
       child: ListTile(
-        leading: SizedBox(
-          width: 75,
-          height: 75,
-          child: Image.network(
-            event.thumbnail,
-            fit: BoxFit.cover,
-          ),
-        ),
+        leading: Image.asset(event.thumbnail),
         title: Text(
           event.title,
           overflow: TextOverflow.ellipsis,

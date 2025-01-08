@@ -2,6 +2,8 @@ import 'package:event_app/features/authentication/presentation/pages/sign_in_pag
 import 'package:event_app/features/authentication/presentation/pages/sign_up_page.dart';
 import 'package:event_app/features/events/presentation/pages/all_events_page.dart';
 import 'package:event_app/features/events/presentation/pages/create_event_page.dart';
+import 'package:event_app/features/events/presentation/pages/event_details_page.dart';
+import 'package:event_app/features/events/presentation/pages/my_events_page.dart';
 import 'package:event_app/features/home/presentation/pages/home_page.dart';
 import 'package:event_app/features/profile/presentation/pages/profile_page.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +28,20 @@ class EventifyRouter {
         },
         routes: <RouteBase>[
           GoRoute(
-            name: 'createEvent',
-            path: '/create-event',
+            name: 'myEvents',
+            path: '/my-events',
             pageBuilder: (context, state) {
-              return MaterialPage(child: CreateEventPage());
+              return MaterialPage(child: MyEventsPage());
             },
+            routes: <RouteBase>[
+              GoRoute(
+                name: 'createEvent',
+                path: '/create-event',
+                pageBuilder: (context, state) {
+                  return MaterialPage(child: CreateEventPage());
+                },
+              ),
+            ],
           ),
         ],
       ),
@@ -54,7 +65,15 @@ class EventifyRouter {
         pageBuilder: (context, state) {
           return MaterialPage(child: AllEventsPage());
         },
-        routes: const <RouteBase>[],
+        routes: <RouteBase>[
+          GoRoute(
+            name: 'eventDetails',
+            path: '/event-details',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: EventDetailsPage());
+            },
+          )
+        ],
       ),
     ],
     // errorPageBuilder: (context, state) {

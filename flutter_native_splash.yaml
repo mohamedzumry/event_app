@@ -1,0 +1,19 @@
+flutter_native_splash:
+  android: true
+  ios: true
+  # web: false
+
+  color: "FFFFFF"
+  # background_image: ""
+  image: "assets/images/app_icon_cw2.png"
+  # branding: "logo on the bottom of the screen"
+
+  # color_dark: "FF303030"
+  # background_image_dark: ""
+  # image_dark: "assets/logos/app_icon_cw1.png"
+  # branding_dark: "logo on the bottom of the screen"
+
+  android_12:
+    color: "FFFFFF"
+    image: "assets/images/app_icon_cw2.png"
+    # branding: "logo on the bottom of the screen"

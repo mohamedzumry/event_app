@@ -29,6 +29,7 @@ class SignUpPage extends StatelessWidget {
         }
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: MainAppBar(
           title: 'Sign Up',
           centerTitle: true,

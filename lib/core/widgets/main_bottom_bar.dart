@@ -20,13 +20,15 @@ class _MainBottomBarState extends State<MainBottomBar> {
       } else if (index == 1) {
         context.goNamed('allEvents');
       } else if (index == 2) {
-        FirebaseAuth.instance.currentUser != null
-            ? context.goNamed('profile')
-            : context.goNamed('signIn');
+        // FirebaseAuth.instance.currentUser == null
+        //     ? context.goNamed('signIn')
+        //     :
+        context.goNamed('profile');
       }
     }
 
     return BottomNavigationBar(
+      backgroundColor: Colors.white,
       currentIndex: widget.selectedIndex,
       onTap: onItemTapped,
       items: <BottomNavigationBarItem>[

@@ -1,3 +1,6 @@
 {
-    "cmake.sourceDirectory": "F:/Projects/Flutter/HND/event_app/linux"
+    "cmake.sourceDirectory": "F:/Projects/Flutter/HND/event_app/linux",
+    "cSpell.words": [
+        "Eventify"
+    ]
 }

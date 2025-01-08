@@ -20,7 +20,9 @@ class _UsernameChangeBottomSheetState extends State<UsernameChangeBottomSheet> {
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Column(
         children: [
+          //
           const SizedBox(height: 15),
+
           Align(
             alignment: Alignment.topCenter,
             child: Container(
@@ -32,7 +34,9 @@ class _UsernameChangeBottomSheetState extends State<UsernameChangeBottomSheet> {
               ),
             ),
           ),
+
           const SizedBox(height: 10),
+
           Align(
             alignment: Alignment.topRight,
             child: IconButton.filled(
@@ -49,29 +53,65 @@ class _UsernameChangeBottomSheetState extends State<UsernameChangeBottomSheet> {
               ),
             ),
           ),
+
           Expanded(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
-              child: TextField(
-                controller: displayNameTextController,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
-                  color: Colors.black,
-                ),
-                decoration: InputDecoration(
-                  label: Text('Display Name'),
-                  border: const OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  ),
-                  contentPadding: const EdgeInsets.only(left: 20.0),
-                  filled: true,
-                  fillColor: const Color(0xFFF5F5F5),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Change Name",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                      ),
+                    ),
+
+                    //
+                    const SizedBox(height: 10),
+
+                    // Password textbox
+                    SizedBox(
+                      height: 54,
+                      child: TextField(
+                        readOnly: false,
+                        controller: displayNameTextController,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(5.0)),
+                          ),
+                          contentPadding: const EdgeInsets.only(left: 20.0),
+                          filled: true,
+                          fillColor: const Color(0xFFF5F5F5),
+                          hintText: "Type New Name",
+                          hintStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey,
+                          ),
+                          //suf
+                        ),
+                        obscureText: true,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
+
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(

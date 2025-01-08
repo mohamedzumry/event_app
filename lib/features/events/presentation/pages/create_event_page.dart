@@ -11,7 +11,10 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreateEventPage extends StatefulWidget {
-  const CreateEventPage({super.key});
+  final bool? isEditable;
+  final Event? event;
+
+  const CreateEventPage({super.key, this.isEditable, this.event});
 
   @override
   State<CreateEventPage> createState() => _CreateEventPageState();
@@ -31,6 +34,21 @@ class _CreateEventPageState extends State<CreateEventPage> {
   final ImagePicker _picker = ImagePicker();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEditable == true && widget.event != null) {
+      final event = widget.event!;
+      _titleController.text = event.title;
+      _locationController.text = event.location;
+      _dateController.text = event.date;
+      _timeController.text = event.time;
+      _categoryController.text = event.category;
+      _descriptionController.text = event.description;
+      thumbnailUrl = event.thumbnail;
+    }
+  }
 
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -75,7 +93,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2101),
     );
     if (picked != null && picked != DateTime.now()) {
@@ -119,6 +137,9 @@ class _CreateEventPageState extends State<CreateEventPage> {
     return BlocListener<EventsBloc, EventsState>(
       bloc: context.read<EventsBloc>(),
       listener: (context, state) {
+        context
+            .read<EventsBloc>()
+            .add(LoadEventsByUserEvent(FirebaseAuth.instance.currentUser!.uid));
         if (state is EventSuccessfullyCreated) {
           context.goNamed('myEvents');
         }
@@ -264,7 +285,20 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           category: _categoryController.text,
                           description: _descriptionController.text,
                         );
-                        context.read<EventsBloc>().add(CreateEventEvent(event));
+                        if (widget.isEditable != null && widget.isEditable!) {
+                          context
+                              .read<EventsBloc>()
+                              .add(UpdateEventEvent(event));
+                        } else {
+                          context
+                              .read<EventsBloc>()
+                              .add(CreateEventEvent(event));
+                        }
+                      } else if (thumbnailUrl == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Please select an image')),
+                        );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

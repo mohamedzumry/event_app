@@ -1,9 +1,9 @@
 import 'package:event_app/core/widgets/main_app_bar.dart';
 import 'package:event_app/core/widgets/main_bottom_bar.dart';
-import 'package:event_app/features/events/domain/entities/event.dart';
-import 'package:event_app/features/events/presentation/widgets/events_temp_card.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:event_app/features/events/presentation/bloc/events_bloc.dart';
+import 'package:event_app/features/events/presentation/widgets/events_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AllEventsPage extends StatefulWidget {
   const AllEventsPage({super.key});
@@ -14,8 +14,19 @@ class AllEventsPage extends StatefulWidget {
 
 class _AllEventsPageState extends State<AllEventsPage> {
   @override
+  void initState() {
+    context.read<EventsBloc>().add(LoadEventsEvent());
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    context.read<EventsBloc>().add(LoadEventsEvent());
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: MainAppBar(
@@ -24,26 +35,27 @@ class _AllEventsPageState extends State<AllEventsPage> {
         centerTitle: true,
       ),
       bottomNavigationBar: MainBottomBar(selectedIndex: 1),
-      body: ListView(
-        shrinkWrap: true,
-        physics: AlwaysScrollableScrollPhysics(),
-        children: [
-          EventsTempCard(
-            event: Event(
-              title:
-                  'Educational Workshops Event Educational Workshops Event Educational Workshops Event',
-              location: 'UK',
-              date: 'Sep 29',
-              time: '10:00 PM',
-              organizerId: user == null ? 'User Id' : user.uid,
-              organizerName: user == null ? 'User Name' : user.displayName!,
-              thumbnail: 'assets/images/all-events-dummy.png',
-              category: 'Music',
-              description:
-                  'Description Description Description Description Description DescriptionDescription Description Description',
-            ),
-          ),
-        ],
+      body: BlocBuilder<EventsBloc, EventsState>(
+        bloc: context.read<EventsBloc>(),
+        builder: (context, state) {
+          if (state is EventLoadInProgress) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is EventLoadSuccess) {
+            final events = state.events;
+            if (events.isEmpty) {
+              return Center(child: Text('No events found.'));
+            }
+            return ListView(
+              shrinkWrap: true,
+              physics: AlwaysScrollableScrollPhysics(),
+              children: events.map((event) => EventCard(event: event)).toList(),
+            );
+          } else if (state is EventLoadFailure) {
+            return Center(child: Text(state.message));
+          } else {
+            return Center(child: Text('Failed to load events.'));
+          }
+        },
       ),
     );
   }

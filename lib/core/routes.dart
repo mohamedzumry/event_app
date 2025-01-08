@@ -61,7 +61,16 @@ class EventifyRouter {
                 name: 'createEvent',
                 path: '/create-event',
                 pageBuilder: (context, state) {
-                  return MaterialPage(child: CreateEventPage());
+                  final Map<String, dynamic>? extra =
+                      state.extra as Map<String, dynamic>?;
+                  final Event? event = extra?['event'];
+                  final bool isEditable = extra?['isEditable'] ?? false;
+                  return MaterialPage(
+                    child: CreateEventPage(
+                      isEditable: isEditable,
+                      event: event,
+                    ),
+                  );
                 },
               ),
             ],

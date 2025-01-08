@@ -47,12 +47,12 @@ class AuthenticationBloc
       );
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
-      await _prefs.then((value) => value.setString(
-          'userDisplayName', userCredential.user!.displayName!));
-      await _prefs.then(
-          (value) => value.setString('userEmail', userCredential.user!.email!));
-      await _prefs.then((value) =>
-          value.setString('userPhotoUrl', userCredential.user!.photoURL!));
+      // await _prefs.then((value) => value.setString(
+      //     'userDisplayName', userCredential.user!.displayName!));
+      // await _prefs.then(
+      //     (value) => value.setString('userEmail', userCredential.user!.email!));
+      // await _prefs.then((value) =>
+      //     value.setString('userPhotoUrl', userCredential.user!.photoURL!));
       emit(GoogleLoginSuccessState(user: userCredential.user!));
     } catch (e) {
       emit(GoogleLoginFailedState(message: e.toString()));

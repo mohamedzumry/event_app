@@ -15,6 +15,8 @@ class CreateEventEvent extends EventsEvent {
   List<Object> get props => [event];
 }
 
+class TriggerEditEvent extends EventsEvent {}
+
 class UpdateEventEvent extends EventsEvent {
   final Event event;
   const UpdateEventEvent(this.event);

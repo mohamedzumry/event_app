@@ -18,14 +18,6 @@ class _MyEventsPageState extends State<MyEventsPage> {
   final User? user = FirebaseAuth.instance.currentUser;
 
   @override
-  void initState() {
-    if (user != null) {
-      context.read<EventsBloc>().add(LoadEventsByUserEvent(user!.uid));
-    }
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() {
     context.read<EventsBloc>().add(LoadEventsByUserEvent(user!.uid));
     super.didChangeDependencies();

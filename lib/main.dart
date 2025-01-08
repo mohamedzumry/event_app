@@ -31,9 +31,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => HomeBloc()),
         BlocProvider(create: (context) => ProfileBloc()),
         BlocProvider(
-            create: (context) => EventsBloc(
-                eventRepository: ImplEventRepository(),
-                offlineEventRepository: ImplOfflineEventRepository())),
+          create: (context) => EventsBloc(
+            eventRepository: ImplEventRepository(),
+            offlineEventRepository: ImplOfflineEventRepository(),
+          ),
+        ),
       ],
       child: MaterialApp.router(
         routerConfig: EventifyRouter().router,

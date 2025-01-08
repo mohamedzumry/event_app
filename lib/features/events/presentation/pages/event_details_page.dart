@@ -24,14 +24,16 @@ class EventDetailsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: MainAppBar(
-        title: 'Event Details',
+        title: event.title,
         automaticallyImplyLeading: true,
-        centerTitle: true,
         actions: isCurrentUserOrganizer(event)
             ? [
                 IconButton(
                   icon: Icon(Icons.edit),
-                  onPressed: () => context.goNamed('createEvent', extra: event),
+                  onPressed: () => context.goNamed('createEvent', extra: {
+                    'event': event,
+                    'isEditable': true,
+                  }),
                 ),
                 IconButton(
                   icon: Icon(Icons.delete),
@@ -74,42 +76,65 @@ class EventDetailsPage extends StatelessWidget {
                 children: [
                   Image(
                     image: NetworkImage(event.thumbnail),
-                    height: 200,
-                    fit: BoxFit.cover,
+                    height: 300,
+                    fit: BoxFit.fill,
+                    width: double.infinity,
                   ),
                   SizedBox(height: 10),
                   Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 20,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey.shade200,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          event.title,
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
+                        Row(
+                          children: [
+                            Icon(Icons.category),
+                            SizedBox(width: 16),
+                            Text(
+                              event.category,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 10),
-                        Text(
-                          event.category,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(height: 5),
+                        SizedBox(height: 16),
                         Row(
                           children: [
                             Icon(Icons.location_pin),
-                            SizedBox(width: 5),
-                            Text(event.location),
+                            SizedBox(width: 16),
+                            Text(
+                              event.location,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ],
                         ),
+                        SizedBox(height: 16),
                         Row(
                           children: [
                             Icon(Icons.calendar_today),
-                            SizedBox(width: 5),
-                            Text('${event.date} - ${event.time}'),
+                            SizedBox(width: 16),
+                            Text(
+                              '${event.date} - ${event.time}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 16),
                         Divider(),
                         Text(
                           'About Event',
@@ -140,10 +165,18 @@ class EventDetailsPage extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: ElevatedButton(
                 onPressed: () {
-                  context.read<EventsBloc>().add(SaveOfflineEventEvent(event));
+                  if (FirebaseAuth.instance.currentUser != null) {
+                    context
+                        .read<EventsBloc>()
+                        .add(SaveOfflineEventEvent(event));
+                  } else {
+                    context.goNamed('signIn');
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size.fromHeight(50),
+                  backgroundColor: Colors.blue.shade900,
+                  foregroundColor: Colors.white,
                 ),
                 child: Text('Save Event'),
               ),

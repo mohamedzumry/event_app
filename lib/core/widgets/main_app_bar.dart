@@ -25,7 +25,7 @@ class _MainAppBarState extends State<MainAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(widget.title),
+      title: Text(widget.title, overflow: TextOverflow.ellipsis, maxLines: 1),
       centerTitle: widget.centerTitle,
       backgroundColor: Theme.of(context).colorScheme.primary,
       leading: widget.leading,

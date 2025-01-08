@@ -23,7 +23,14 @@ class _ProfilePageState extends State<ProfilePage> {
     final User user = FirebaseAuth.instance.currentUser!;
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       bloc: context.read<AuthenticationBloc>(),
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is UserLoggedOutState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Signed out successfully')),
+          );
+          context.goNamed('home');
+        }
+      },
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: MainAppBar(

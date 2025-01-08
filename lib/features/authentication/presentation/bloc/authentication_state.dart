@@ -56,3 +56,17 @@ class UserLoggedOutState extends AuthenticationState {
   @override
   List<Object> get props => [];
 }
+
+class UserDisplayNameUpdatedState extends AuthenticationState {
+  final String displayName;
+  const UserDisplayNameUpdatedState({required this.displayName});
+  @override
+  List<Object> get props => [displayName];
+}
+
+class UserDisplayNameUpdateFailedState extends AuthenticationState {
+  final String message;
+  const UserDisplayNameUpdateFailedState({required this.message});
+  @override
+  List<Object> get props => [message];
+}

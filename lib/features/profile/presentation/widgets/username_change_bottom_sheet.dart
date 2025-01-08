@@ -1,6 +1,8 @@
 import 'package:event_app/core/configs/colors_config.dart';
+import 'package:event_app/features/authentication/presentation/bloc/authentication_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UsernameChangeBottomSheet extends StatefulWidget {
   final String? displayName;
@@ -12,13 +14,29 @@ class UsernameChangeBottomSheet extends StatefulWidget {
 }
 
 class _UsernameChangeBottomSheetState extends State<UsernameChangeBottomSheet> {
+  final TextEditingController displayNameTextController =
+      TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    displayNameTextController.text = widget.displayName ?? '';
+  }
+
+  @override
+  void dispose() {
+    displayNameTextController.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController displayNameTextController = TextEditingController(
-        text: widget.displayName != null ? widget.displayName! : '');
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 15),
           Align(
@@ -35,11 +53,7 @@ class _UsernameChangeBottomSheetState extends State<UsernameChangeBottomSheet> {
           const SizedBox(height: 10),
           Align(
             alignment: Alignment.topRight,
-            child: IconButton.filled(
-              style: ButtonStyle(
-                overlayColor: WidgetStatePropertyAll(Color(0xFFF5F5F5)),
-                backgroundColor: WidgetStatePropertyAll(Color(0xFFF5F5F5)),
-              ),
+            child: IconButton(
               onPressed: () {
                 context.pop();
               },
@@ -49,60 +63,58 @@ class _UsernameChangeBottomSheetState extends State<UsernameChangeBottomSheet> {
               ),
             ),
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: TextField(
-                controller: displayNameTextController,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
-                  color: Colors.black,
-                ),
-                decoration: InputDecoration(
-                  label: Text('Display Name'),
-                  border: const OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+          SizedBox(height: 20),
+          SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                TextField(
+                  controller: displayNameTextController,
+                  focusNode: _focusNode,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                    color: Colors.black,
                   ),
-                  contentPadding: const EdgeInsets.only(left: 20.0),
-                  filled: true,
-                  fillColor: const Color(0xFFF5F5F5),
-                ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(
-                  top: 20,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 10),
-              child: TextButton(
-                onPressed: () {
-                  //Add the logic to update the name here
-
-                  context.pop();
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: Color(ColorsConfig().purpleBlue),
-                  minimumSize: const Size.fromHeight(54),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Save Name',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          )),
-                    ],
+                  decoration: InputDecoration(
+                    labelText: 'Display Name',
+                    border: const OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    ),
+                    contentPadding: const EdgeInsets.only(left: 20.0),
+                    filled: true,
+                    fillColor: const Color(0xFFF5F5F5),
                   ),
                 ),
-              ),
+                SizedBox(height: 20),
+                TextButton(
+                  onPressed: () {
+                    context.read<AuthenticationBloc>().add(
+                          UpdateDisplayNameEvent(
+                              displayNameTextController.text),
+                        );
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Color(ColorsConfig().purpleBlue),
+                    minimumSize: const Size.fromHeight(54),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Save Name',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

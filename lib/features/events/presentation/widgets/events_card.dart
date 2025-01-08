@@ -12,10 +12,7 @@ class EventCard extends StatelessWidget {
         leading: SizedBox(
           width: 75,
           height: 75,
-          child: Image.network(
-            event.thumbnail,
-            fit: BoxFit.cover,
-          ),
+          child: Image(image: NetworkImage(event.thumbnail)),
         ),
         title: Text(
           event.title,

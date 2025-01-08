@@ -24,6 +24,7 @@ class AuthenticationBloc
       on<SignInWithGoogleUsingEmailPasswordEvent>(
           signInWithGoogleUsingEmailPasswordEvent);
       on<LogoutEvent>(logoutEvent);
+      on<UpdateDisplayNameEvent>(updateDisplayNameEvent);
     });
   }
 
@@ -118,5 +119,17 @@ class AuthenticationBloc
     await FirebaseAuth.instance.signOut();
     _prefs.then((value) => value.clear());
     emit(UserLoggedOutState());
+  }
+
+  FutureOr<void> updateDisplayNameEvent(
+      UpdateDisplayNameEvent event, Emitter<AuthenticationState> emit) async {
+    try {
+      await FirebaseAuth.instance.currentUser
+          ?.updateDisplayName(event.displayName);
+      emit(UserDisplayNameUpdatedState(displayName: event.displayName));
+    } catch (e) {
+      emit(UserDisplayNameUpdateFailedState(
+          message: 'Failed to update display name'));
+    }
   }
 }

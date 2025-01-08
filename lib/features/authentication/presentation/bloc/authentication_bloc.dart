@@ -98,12 +98,6 @@ class AuthenticationBloc
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: event.email, password: event.password);
-      // await _prefs.then((value) =>
-      //     value.setString('userDisplayName', credential.user!.displayName!));
-      // await _prefs.then(
-      //     (value) => value.setString('userEmail', credential.user!.email!));
-      // await _prefs.then((value) =>
-      //     value.setString('userPhotoUrl', credential.user!.photoURL!));
       emit(UserLoginSuccessState(user: credential.user!));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

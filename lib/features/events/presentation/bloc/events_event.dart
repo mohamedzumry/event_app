@@ -45,3 +45,27 @@ class LoadEventsByUserEvent extends EventsEvent {
   @override
   List<Object> get props => [userId];
 }
+
+// Offline Events
+class SaveOfflineEventEvent extends EventsEvent {
+  final Event event;
+  const SaveOfflineEventEvent(this.event);
+
+  @override
+  List<Object> get props => [event];
+}
+
+class DeleteOfflineEventEvent extends EventsEvent {
+  final String eventId;
+  const DeleteOfflineEventEvent(this.eventId);
+
+  @override
+  List<Object> get props => [eventId];
+}
+
+class LoadOfflineEventsEvent extends EventsEvent {
+  const LoadOfflineEventsEvent();
+
+  @override
+  List<Object> get props => [];
+}

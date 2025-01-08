@@ -7,13 +7,27 @@ class ImplEventRepository extends EventRepository {
       FirebaseFirestore.instance.collection('events');
 
   @override
-  Future<void> addEvent(Event event) {
-    return _eventCollection.add(event.toJson());
+  Future<void> addEvent(Event event) async {
+    DocumentReference docRef = await _eventCollection.add(event.toJson());
+    event = Event(
+      id: docRef.id,
+      title: event.title,
+      location: event.location,
+      date: event.date,
+      time: event.time,
+      organizerId: event.organizerId,
+      organizerName: event.organizerName,
+      thumbnail: event.thumbnail,
+      category: event.category,
+      description: event.description,
+    );
+    final doc = await _eventCollection.doc(docRef.id).update(event.toJson());
+    return doc;
   }
 
   @override
-  Future<void> updateEvent(Event event) {
-    return _eventCollection.doc(event.id).update(event.toJson());
+  Future<void> updateEvent(Event event) async {
+    await _eventCollection.doc(event.id).update(event.toJson());
   }
 
   @override
@@ -25,7 +39,7 @@ class ImplEventRepository extends EventRepository {
   Stream<List<Event>> getEvents() {
     return _eventCollection.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
-        return Event.fromJson(doc.data() as Map<String, dynamic>);
+        return Event.fromJson(doc.data() as Map<String, dynamic>, doc.id);
       }).toList();
     });
   }
@@ -37,7 +51,7 @@ class ImplEventRepository extends EventRepository {
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) {
-        return Event.fromJson(doc.data() as Map<String, dynamic>);
+        return Event.fromJson(doc.data() as Map<String, dynamic>, doc.id);
       }).toList();
     });
   }

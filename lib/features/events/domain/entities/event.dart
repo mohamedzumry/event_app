@@ -23,9 +23,9 @@ class Event {
     required this.description,
   });
 
-  factory Event.fromJson(Map<String, dynamic> json) {
+  factory Event.fromJson(Map<String, dynamic> json, String id) {
     return Event(
-      id: json['id'],
+      id: id,
       title: json['title'],
       location: json['location'],
       date: json['date'],
@@ -40,7 +40,6 @@ class Event {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'title': title,
       'location': location,
       'date': date,

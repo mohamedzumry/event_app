@@ -1,5 +1,6 @@
 import 'package:event_app/features/authentication/presentation/pages/sign_in_page.dart';
 import 'package:event_app/features/authentication/presentation/pages/sign_up_page.dart';
+import 'package:event_app/features/events/domain/entities/event.dart';
 import 'package:event_app/features/events/presentation/pages/all_events_page.dart';
 import 'package:event_app/features/events/presentation/pages/create_event_page.dart';
 import 'package:event_app/features/events/presentation/pages/event_details_page.dart';
@@ -19,6 +20,20 @@ class EventifyRouter {
           return const MaterialPage(child: HomePage());
         },
         routes: const <RouteBase>[],
+      ),
+      GoRoute(
+        name: 'signIn',
+        path: '/sign-in',
+        pageBuilder: (context, state) {
+          return MaterialPage(child: SignInPage());
+        },
+      ),
+      GoRoute(
+        name: 'signUp',
+        path: '/sign-up',
+        pageBuilder: (context, state) {
+          return MaterialPage(child: SignUpPage());
+        },
       ),
       GoRoute(
         name: 'profile',
@@ -46,20 +61,6 @@ class EventifyRouter {
         ],
       ),
       GoRoute(
-        name: 'signIn',
-        path: '/sign-in',
-        pageBuilder: (context, state) {
-          return MaterialPage(child: SignInPage());
-        },
-      ),
-      GoRoute(
-        name: 'signUp',
-        path: '/sign-up',
-        pageBuilder: (context, state) {
-          return MaterialPage(child: SignUpPage());
-        },
-      ),
-      GoRoute(
         name: 'allEvents',
         path: '/all-events',
         pageBuilder: (context, state) {
@@ -70,7 +71,11 @@ class EventifyRouter {
             name: 'eventDetails',
             path: '/event-details',
             pageBuilder: (context, state) {
-              return MaterialPage(child: EventDetailsPage());
+              final Event event = state.extra as Event;
+              return MaterialPage(
+                  child: EventDetailsPage(
+                event: event,
+              ));
             },
           )
         ],

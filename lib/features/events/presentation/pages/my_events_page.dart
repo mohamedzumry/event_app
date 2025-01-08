@@ -26,6 +26,12 @@ class _MyEventsPageState extends State<MyEventsPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    context.read<EventsBloc>().add(LoadEventsByUserEvent(user!.uid));
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -56,14 +62,6 @@ class _MyEventsPageState extends State<MyEventsPage> {
               itemBuilder: (context, index) {
                 final event = events[index];
                 return EventCard(
-                  // title: Text(event.title),
-                  // subtitle: Text('${event.date} - ${event.location}'),
-                  // onTap: () {
-                  //   context.goNamed(
-                  //     'eventDetails',
-                  //     pathParameters: {'eventId': event.id!},
-                  //   );
-                  // },
                   event: event,
                 );
               },

@@ -4,7 +4,6 @@ import 'package:event_app/features/events/domain/entities/event.dart';
 import 'package:event_app/features/events/presentation/widgets/events_temp_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class AllEventsPage extends StatefulWidget {
   const AllEventsPage({super.key});
@@ -23,12 +22,6 @@ class _AllEventsPageState extends State<AllEventsPage> {
         title: 'All Events',
         automaticallyImplyLeading: false,
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () => context.goNamed('myEvents'),
-            icon: const Icon(Icons.event_note_rounded),
-          ),
-        ],
       ),
       bottomNavigationBar: MainBottomBar(selectedIndex: 1),
       body: ListView(

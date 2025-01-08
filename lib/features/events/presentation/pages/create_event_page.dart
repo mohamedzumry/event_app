@@ -45,10 +45,10 @@ class _CreateEventPageState extends State<CreateEventPage> {
           thumbnailUrl = tempThumbnailUrl;
         });
       } else {
-        print("Failed to upload image");
+        debugPrint("Failed to upload image");
       }
     } else {
-      print("No image selected");
+      debugPrint("No image selected");
     }
   }
 
@@ -94,7 +94,10 @@ class _CreateEventPageState extends State<CreateEventPage> {
             children: [
               TextFormField(
                 controller: _titleController,
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: InputDecoration(
+                  labelText: 'Title',
+                  border: OutlineInputBorder(),
+                ),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter title';
@@ -104,7 +107,10 @@ class _CreateEventPageState extends State<CreateEventPage> {
               ),
               TextFormField(
                 controller: _locationController,
-                decoration: InputDecoration(labelText: 'Location'),
+                decoration: InputDecoration(
+                  labelText: 'Location',
+                  border: OutlineInputBorder(),
+                ),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter location';
@@ -116,6 +122,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                 controller: _dateController,
                 decoration: InputDecoration(
                   labelText: 'Date',
+                  border: OutlineInputBorder(),
                   suffixIcon: IconButton(
                     icon: Icon(Icons.calendar_today),
                     onPressed: () {
@@ -134,6 +141,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                 controller: _timeController,
                 decoration: InputDecoration(
                   labelText: 'Time',
+                  border: OutlineInputBorder(),
                   suffixIcon: IconButton(
                     icon: Icon(Icons.access_time),
                     onPressed: () {
@@ -150,7 +158,10 @@ class _CreateEventPageState extends State<CreateEventPage> {
               ),
               TextFormField(
                 controller: _categoryController,
-                decoration: InputDecoration(labelText: 'Category'),
+                decoration: InputDecoration(
+                  labelText: 'Category',
+                  border: OutlineInputBorder(),
+                ),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter category';
@@ -160,7 +171,10 @@ class _CreateEventPageState extends State<CreateEventPage> {
               ),
               TextFormField(
                 controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: InputDecoration(
+                  labelText: 'Description',
+                  border: OutlineInputBorder(),
+                ),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter description';
@@ -196,7 +210,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         category: _categoryController.text,
                         description: _descriptionController.text,
                       );
-                      context.read<EventsBloc>().add(CreateEvent(event));
+                      context.read<EventsBloc>().add(CreateEventEvent(event));
                       context.pop();
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(

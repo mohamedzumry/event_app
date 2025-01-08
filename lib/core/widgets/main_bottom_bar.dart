@@ -20,10 +20,9 @@ class _MainBottomBarState extends State<MainBottomBar> {
       } else if (index == 1) {
         context.goNamed('allEvents');
       } else if (index == 2) {
-        // FirebaseAuth.instance.currentUser == null
-        //     ? context.goNamed('signIn')
-        //     :
-        context.goNamed('profile');
+        FirebaseAuth.instance.currentUser == null
+            ? context.goNamed('signIn')
+            : context.goNamed('profile');
       }
     }
 

@@ -1,5 +1,4 @@
 import 'package:event_app/core/configs/colors_config.dart';
-import 'package:event_app/features/profile/presentation/widgets/password_card.dart';
 import 'package:flutter/material.dart';
 
 class PasswordChangeBottomSheet extends StatelessWidget {
@@ -7,14 +6,15 @@ class PasswordChangeBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController passwordTextController = TextEditingController();
+    TextEditingController confirmPasswordTextController =
+        TextEditingController();
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //
           const SizedBox(height: 15),
-
           Align(
             alignment: Alignment.topCenter,
             child: Container(
@@ -26,10 +26,7 @@ class PasswordChangeBottomSheet extends StatelessWidget {
               ),
             ),
           ),
-
-          //
           const SizedBox(height: 10),
-
           Align(
             alignment: Alignment.topRight,
             child: IconButton.filled(
@@ -46,58 +43,76 @@ class PasswordChangeBottomSheet extends StatelessWidget {
               ),
             ),
           ),
-
           Text('Change Password',
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
                 color: Colors.black,
               )),
-
-          //
           const SizedBox(height: 10),
-
           Text('Add a new secure password here',
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w400,
                 color: Color(0x80000000),
               )),
-
-          //
           const SizedBox(height: 10),
-
-          //create password widget and add it here
           Expanded(
             child: ListView(
               physics: const BouncingScrollPhysics(),
-              // padding: EdgeInsets.only(
-              //     bottom: MediaQuery.of(context).viewInsets.bottom),
               children: [
-                PasswordCard(
-                  title: 'Current Password',
-                  //Add the current password here
-                  passwordText: 'k220bh3',
-                  passwordTextReadOnly: true,
-                  label: '',
-                  iconIsVisible: true,
+                TextField(
+                  obscureText: true,
+                  controller: passwordTextController,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                  decoration: InputDecoration(
+                    label: Text('New Password'),
+                    border: const OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    ),
+                    contentPadding: const EdgeInsets.only(left: 20.0),
+                    filled: true,
+                    fillColor: const Color(0xFFF5F5F5),
+                  ),
                 ),
-                PasswordCard(
-                  title: 'New Password',
-                  label: 'Type New Password',
-                  iconIsVisible: true,
+                SizedBox(height: 20),
+                TextField(
+                  obscureText: true,
+                  controller: confirmPasswordTextController,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                  decoration: InputDecoration(
+                    label: Text('Confirm Password'),
+                    border: const OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    ),
+                    contentPadding: const EdgeInsets.only(left: 20.0),
+                    filled: true,
+                    fillColor: const Color(0xFFF5F5F5),
+                  ),
                 ),
-                PasswordCard(
-                  title: 'Confirm New Password',
-                  label: 'Type New Password',
-                  iconIsVisible: true,
-                ),
-                // const SizedBox(height: 300),
+                // PasswordCard(
+                //   title: 'New Password',
+                //   label: 'Type New Password',
+                //   iconIsVisible: true,
+                // ),
+                // PasswordCard(
+                //   title: 'Confirm New Password',
+                //   label: 'Type New Password',
+                //   iconIsVisible: true,
+                // ),
               ],
             ),
           ),
-
-          //Update Password Button
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(

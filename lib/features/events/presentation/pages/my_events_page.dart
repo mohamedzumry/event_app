@@ -15,12 +15,18 @@ class MyEventsPage extends StatefulWidget {
 }
 
 class _MyEventsPageState extends State<MyEventsPage> {
+  final User? user = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    if (user != null) {
+      context.read<EventsBloc>().add(LoadEventsByUserEvent(user!.uid));
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      context.read<EventsBloc>().add(LoadEventsByUserEvent(user.uid));
-    }
     return Scaffold(
       appBar: MainAppBar(
         title: 'My Events',

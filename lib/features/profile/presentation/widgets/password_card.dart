@@ -30,8 +30,6 @@ class _PasswordCardState extends State<PasswordCard> {
 
   @override
   void initState() {
-    // ignore: todo
-    // TODO: implement initState
     _obscureText = widget.iconIsVisible;
     passwordReadOnly = widget.passwordTextReadOnly;
 

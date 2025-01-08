@@ -1,9 +1,10 @@
 import 'package:event_app/core/configs/colors_config.dart';
-import 'package:event_app/features/profile/presentation/widgets/password_card.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class UsernameChangeBottomSheet extends StatefulWidget {
-  const UsernameChangeBottomSheet({super.key});
+  final String? displayName;
+  const UsernameChangeBottomSheet({super.key, required this.displayName});
 
   @override
   State<UsernameChangeBottomSheet> createState() =>
@@ -12,23 +13,14 @@ class UsernameChangeBottomSheet extends StatefulWidget {
 
 class _UsernameChangeBottomSheetState extends State<UsernameChangeBottomSheet> {
   @override
-  void initState() {
-    // ignore: todo
-    // TODO: implement initState
-    super.initState();
-
-    setState(() {});
-  }
-
-  @override
   Widget build(BuildContext context) {
+    TextEditingController displayNameTextController = TextEditingController(
+        text: widget.displayName != null ? widget.displayName! : '');
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Column(
         children: [
-          //
           const SizedBox(height: 15),
-
           Align(
             alignment: Alignment.topCenter,
             child: Container(
@@ -40,10 +32,7 @@ class _UsernameChangeBottomSheetState extends State<UsernameChangeBottomSheet> {
               ),
             ),
           ),
-
-          //
           const SizedBox(height: 10),
-
           Align(
             alignment: Alignment.topRight,
             child: IconButton.filled(
@@ -52,7 +41,7 @@ class _UsernameChangeBottomSheetState extends State<UsernameChangeBottomSheet> {
                 backgroundColor: WidgetStatePropertyAll(Color(0xFFF5F5F5)),
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                context.pop();
               },
               icon: Icon(
                 Icons.close_rounded,
@@ -60,22 +49,29 @@ class _UsernameChangeBottomSheetState extends State<UsernameChangeBottomSheet> {
               ),
             ),
           ),
-
           Expanded(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
-              child: PasswordCard(
-                title: 'Username',
-                //Add the current username here
-                passwordText: 'Pawan Rajapakshe',
-                passwordTextReadOnly: false,
-                label: '',
-                iconIsVisible: false,
+              child: TextField(
+                controller: displayNameTextController,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+                decoration: InputDecoration(
+                  label: Text('Display Name'),
+                  border: const OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  ),
+                  contentPadding: const EdgeInsets.only(left: 20.0),
+                  filled: true,
+                  fillColor: const Color(0xFFF5F5F5),
+                ),
               ),
             ),
           ),
-
-          //Save Name Button
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -86,7 +82,7 @@ class _UsernameChangeBottomSheetState extends State<UsernameChangeBottomSheet> {
                 onPressed: () {
                   //Add the logic to update the name here
 
-                  Navigator.of(context).pop();
+                  context.pop();
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: Color(ColorsConfig().purpleBlue),

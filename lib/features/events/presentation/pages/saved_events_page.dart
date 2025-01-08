@@ -2,32 +2,27 @@ import 'package:event_app/core/widgets/main_app_bar.dart';
 import 'package:event_app/core/widgets/main_bottom_bar.dart';
 import 'package:event_app/features/events/presentation/bloc/events_bloc.dart';
 import 'package:event_app/features/events/presentation/widgets/events_card.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
-class MyEventsPage extends StatefulWidget {
-  const MyEventsPage({super.key});
+class SavedEventsPage extends StatefulWidget {
+  const SavedEventsPage({super.key});
 
   @override
-  State<MyEventsPage> createState() => _MyEventsPageState();
+  State<SavedEventsPage> createState() => _SavedEventsPageState();
 }
 
-class _MyEventsPageState extends State<MyEventsPage> {
-  final User? user = FirebaseAuth.instance.currentUser;
-
+class _SavedEventsPageState extends State<SavedEventsPage> {
   @override
   void initState() {
-    if (user != null) {
-      context.read<EventsBloc>().add(LoadEventsByUserEvent(user!.uid));
-    }
+    context.read<EventsBloc>().add(LoadOfflineEventsEvent());
+
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    context.read<EventsBloc>().add(LoadEventsByUserEvent(user!.uid));
+    context.read<EventsBloc>().add(LoadOfflineEventsEvent());
     super.didChangeDependencies();
   }
 
@@ -36,15 +31,9 @@ class _MyEventsPageState extends State<MyEventsPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: MainAppBar(
-        title: 'My Events',
+        title: 'Saved Events',
         automaticallyImplyLeading: true,
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () => context.goNamed('createEvent'),
-            icon: const Icon(Icons.add_circle_rounded),
-          ),
-        ],
       ),
       bottomNavigationBar: MainBottomBar(selectedIndex: 2),
       body: BlocBuilder<EventsBloc, EventsState>(
@@ -52,8 +41,8 @@ class _MyEventsPageState extends State<MyEventsPage> {
         builder: (context, state) {
           if (state is EventLoadInProgress) {
             return Center(child: CircularProgressIndicator());
-          } else if (state is EventLoadSuccess) {
-            final events = state.events;
+          } else if (state is OfflineEventsLoadedSuccessfullyState) {
+            final events = state.offlineEvents;
             if (events.isEmpty) {
               return Center(child: Text('No events found.'));
             }

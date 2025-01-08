@@ -5,6 +5,7 @@ import 'package:event_app/features/events/presentation/pages/all_events_page.dar
 import 'package:event_app/features/events/presentation/pages/create_event_page.dart';
 import 'package:event_app/features/events/presentation/pages/event_details_page.dart';
 import 'package:event_app/features/events/presentation/pages/my_events_page.dart';
+import 'package:event_app/features/events/presentation/pages/saved_events_page.dart';
 import 'package:event_app/features/home/presentation/pages/home_page.dart';
 import 'package:event_app/features/profile/presentation/pages/profile_page.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,13 @@ class EventifyRouter {
           return const MaterialPage(child: ProfilePage());
         },
         routes: <RouteBase>[
+          GoRoute(
+            name: 'savedEvents',
+            path: '/saved-events',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: SavedEventsPage());
+            },
+          ),
           GoRoute(
             name: 'myEvents',
             path: '/my-events',

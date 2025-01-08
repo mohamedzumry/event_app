@@ -151,6 +151,26 @@ class _ProfilePageState extends State<ProfilePage> {
 
                 const SizedBox(height: 20),
 
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          WidgetStatePropertyAll(Colors.blue.shade900),
+                      foregroundColor: WidgetStatePropertyAll(Colors.white),
+                    ),
+                    icon: Icon(Icons.event_available_sharp),
+                    onPressed: () => context.goNamed('savedEvents'),
+                    label: Text('Saved Events',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        )),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
                 for (var userinfo in user!.providerData)
                   if (userinfo.providerId == 'password')
                     SizedBox(

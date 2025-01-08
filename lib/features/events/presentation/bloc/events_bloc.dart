@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:event_app/features/events/domain/entities/event.dart';
 import 'package:event_app/features/events/domain/repositories/event_repository.dart';
 import 'package:event_app/features/events/domain/repositories/offline_event_repository.dart';
+import 'package:flutter/foundation.dart';
 
 part 'events_event.dart';
 part 'events_state.dart';
@@ -105,6 +106,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       final offlineEvents = await offlineEventRepository.getMyEvents();
       emit(OfflineEventsLoadedSuccessfullyState(offlineEvents: offlineEvents));
     } catch (e) {
+      debugPrint(e.toString());
       emit(OfflineEventsLoadFailureState());
     }
   }

@@ -15,12 +15,6 @@ class EventCarouselTile extends StatefulWidget {
 
 class _EventCarouselTileState extends State<EventCarouselTile> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Card(
       color: Colors.white,

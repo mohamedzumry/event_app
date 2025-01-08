@@ -28,6 +28,7 @@ class _MyEventsPageState extends State<MyEventsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: MainAppBar(
         title: 'My Events',
         automaticallyImplyLeading: true,

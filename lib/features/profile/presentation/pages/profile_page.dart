@@ -20,7 +20,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    final User user = FirebaseAuth.instance.currentUser!;
+    final User? user = FirebaseAuth.instance.currentUser;
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       bloc: context.read<AuthenticationBloc>(),
       listener: (context, state) {
@@ -62,8 +62,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: ClipOval(
                         child: Image(
                           fit: BoxFit.fill,
-                          image: user.photoURL != null
-                              ? NetworkImage(user.photoURL!)
+                          image: user != null
+                              ? user.photoURL != null
+                                  ? NetworkImage(user.photoURL!)
+                                  : AssetImage('assets/images/dp.jpeg')
                               : AssetImage('assets/images/dp.jpeg'),
                         ),
                       ),
@@ -82,9 +84,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Color(0x80000000),
                     )),
               ),
+
               AccountDetailsCard(
                 title: 'Name',
-                dataField: user.displayName != null ? user.displayName! : '',
+                dataField: user != null
+                    ? user.displayName != null
+                        ? user.displayName!
+                        : ''
+                    : '',
                 onTap: () {
                   showModalBottomSheet(
                       isScrollControlled: true,
@@ -100,18 +107,29 @@ class _ProfilePageState extends State<ProfilePage> {
                           height: MediaQuery.of(context).viewInsets.bottom +
                               MediaQuery.of(context).size.height * 0.4,
                           child: UsernameChangeBottomSheet(
-                              displayName: user.displayName),
+                              displayName: user != null
+                                  ? user.displayName != null
+                                      ? user.displayName!
+                                      : ''
+                                  : ''),
                         );
                       });
                 },
               ),
+
               AccountDetailsCard(
                 title: 'Email',
                 //setting the dataField to a hardcoded value for now to avoid errors
-                dataField: user.email != null ? user.email! : '',
+                dataField: user != null
+                    ? user.email != null
+                        ? user.email!
+                        : ''
+                    : '',
                 onTap: () {},
               ),
+
               const SizedBox(height: 20),
+
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
@@ -129,7 +147,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       )),
                 ),
               ),
+
               const SizedBox(height: 20),
+
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
@@ -158,7 +178,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       )),
                 ),
               ),
+
               const SizedBox(height: 20),
+
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(

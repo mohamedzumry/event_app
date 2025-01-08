@@ -20,14 +20,14 @@ class EventsTempCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.location_pin),
+                Icon(Icons.location_pin, size: 20),
                 SizedBox(width: 5),
                 Text(event.location),
               ],
             ),
             Row(
               children: [
-                Icon(Icons.calendar_today),
+                Icon(Icons.calendar_month, size: 20),
                 SizedBox(width: 5),
                 Text('${event.date}, ${event.time}'),
               ],

@@ -141,6 +141,14 @@ class _CreateEventPageState extends State<CreateEventPage> {
             .read<EventsBloc>()
             .add(LoadEventsByUserEvent(FirebaseAuth.instance.currentUser!.uid));
         if (state is EventSuccessfullyCreated) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Event created successfully.')),
+          );
+          context.goNamed('myEvents');
+        } else if (state is EventSuccessfullyUpdated) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Event updated successfully.')),
+          );
           context.goNamed('myEvents');
         }
       },
@@ -298,6 +306,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       if (thumbnailUrl != null) {
                         final User? user = _auth.currentUser;
                         final event = Event(
+                          id: widget.isEditable == true ? widget.event?.id : '',
                           title: _titleController.text,
                           location: _locationController.text,
                           date: _dateController.text,
@@ -308,15 +317,13 @@ class _CreateEventPageState extends State<CreateEventPage> {
                           category: _categoryController.text,
                           description: _descriptionController.text,
                         );
-                        if (widget.isEditable != null && widget.isEditable!) {
-                          context
-                              .read<EventsBloc>()
-                              .add(UpdateEventEvent(event));
-                        } else {
-                          context
-                              .read<EventsBloc>()
-                              .add(CreateEventEvent(event));
-                        }
+                        widget.isEditable == true
+                            ? context
+                                .read<EventsBloc>()
+                                .add(UpdateEventEvent(event))
+                            : context
+                                .read<EventsBloc>()
+                                .add(CreateEventEvent(event));
                       } else if (thumbnailUrl == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

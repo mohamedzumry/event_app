@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_app/features/events/domain/entities/event.dart';
 import 'package:event_app/features/events/domain/repositories/event_repository.dart';
+import 'package:flutter/material.dart';
 
 class ImplEventRepository extends EventRepository {
   final CollectionReference _eventCollection =
@@ -21,13 +22,18 @@ class ImplEventRepository extends EventRepository {
       category: event.category,
       description: event.description,
     );
-    final doc = await _eventCollection.doc(docRef.id).update(event.toJson());
-    return doc;
+    await docRef.update(event.toJson());
   }
 
   @override
   Future<void> updateEvent(Event event) async {
-    await _eventCollection.doc(event.id).update(event.toJson());
+    try {
+      DocumentReference docRef = _eventCollection.doc(event.id);
+      debugPrint('Event updated with ID: ${event.id}');
+      await docRef.update(event.toJson());
+    } catch (e) {
+      debugPrint('Failed to update event: $e');
+    }
   }
 
   @override

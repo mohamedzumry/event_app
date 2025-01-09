@@ -32,11 +32,17 @@ class EventCreationFailureState extends EventsState {
 }
 
 class EventSuccessfullyCreated extends EventsState {
-  final Event event;
-  const EventSuccessfullyCreated(this.event);
+  const EventSuccessfullyCreated();
 
   @override
-  List<Object> get props => [event];
+  List<Object> get props => [];
+}
+
+class EventSuccessfullyUpdated extends EventsState {
+  const EventSuccessfullyUpdated();
+
+  @override
+  List<Object> get props => [];
 }
 
 class EventDeletedSuccessfullyState extends EventsState {

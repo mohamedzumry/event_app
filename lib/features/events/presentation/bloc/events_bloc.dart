@@ -42,7 +42,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       CreateEventEvent event, Emitter<EventsState> emit) async {
     try {
       await eventRepository.addEvent(event.event);
-      emit(EventSuccessfullyCreated(event.event));
+      emit(EventSuccessfullyCreated());
     } catch (_) {
       emit(EventCreationFailureState());
     }
@@ -52,7 +52,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       UpdateEventEvent event, Emitter<EventsState> emit) async {
     try {
       await eventRepository.updateEvent(event.event);
-      add(LoadEventsEvent());
+      emit(EventSuccessfullyUpdated());
     } catch (_) {
       emit(EventCreationFailureState());
     }
@@ -62,7 +62,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       DeleteEvent event, Emitter<EventsState> emit) async {
     try {
       await eventRepository.deleteEvent(event.eventId);
-      add(LoadEventsEvent());
+      emit(EventDeletedSuccessfullyState());
     } catch (_) {
       emit(EventCreationFailureState());
     }

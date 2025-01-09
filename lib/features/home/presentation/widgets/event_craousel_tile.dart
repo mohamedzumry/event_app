@@ -30,7 +30,7 @@ class EventCarouselTile extends StatelessWidget {
                 Image.network(
                   event.thumbnail,
                   width: double.infinity,
-                  height: 160, // Increased height
+                  height: 220,
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;
@@ -55,7 +55,7 @@ class EventCarouselTile extends StatelessWidget {
                     Text(
                       event.title,
                       style: const TextStyle(
-                        fontSize: 17,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
@@ -68,13 +68,13 @@ class EventCarouselTile extends StatelessWidget {
                       Text(
                         'Organized By ${event.organizerName}',
                         style: const TextStyle(
-                          fontSize: 14,
+                          fontSize: 16,
                           fontStyle: FontStyle.italic,
                           color: Colors.grey,
                         ),
                       ),
 
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 8),
 
                     // Description
                     Text(
@@ -83,11 +83,11 @@ class EventCarouselTile extends StatelessWidget {
                         fontSize: 16,
                         color: Colors.grey,
                       ),
-                      maxLines: 2,
+                      maxLines: 5,
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 8),
 
                     // Event date
                     Row(

@@ -252,6 +252,29 @@ class _CreateEventPageState extends State<CreateEventPage> {
                   },
                 ),
                 SizedBox(height: 16.0),
+                if (widget.isEditable == true &&
+                    widget.event != null &&
+                    widget.event!.thumbnail.isNotEmpty)
+                  Image.network(
+                    widget.event!.thumbnail,
+                    // width: double.infinity,
+                    // height: 160,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(child: CircularProgressIndicator());
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: double.infinity,
+                        height: 160,
+                        color: Colors.grey[200],
+                        child: const Icon(Icons.broken_image,
+                            size: 50, color: Colors.grey),
+                      );
+                    },
+                  ),
+                SizedBox(height: 16.0),
                 GestureDetector(
                   onTap: () async {
                     _isLoading = true;
@@ -307,7 +330,9 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       }
                     }
                   },
-                  child: Text('Create Event'),
+                  child: Text(widget.isEditable == true
+                      ? 'Update Event'
+                      : 'Create Event'),
                 ),
               ],
             ),

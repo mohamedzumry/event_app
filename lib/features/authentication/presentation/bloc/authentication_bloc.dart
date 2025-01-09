@@ -18,16 +18,15 @@ class AuthenticationBloc
               allowList: <String>{'userDisplayName, userEmail, userPhotoUrl'}));
 
   AuthenticationBloc() : super(AuthenticationInitial()) {
-    on<AuthenticationEvent>((event, emit) {
-      on<SignInWithGoogleEvent>(signInWithGoogleEvent);
-      on<SignUpWithGoogleUsingEmailPasswordEvent>(
-          signUpWithGoogleUsingEmailPasswordEvent);
-      on<SignInWithGoogleUsingEmailPasswordEvent>(
-          signInWithGoogleUsingEmailPasswordEvent);
-      on<LogoutEvent>(logoutEvent);
-      on<UpdateDisplayNameEvent>(updateDisplayNameEvent);
-      on<UpdatePasswordEvent>(updatePasswordEvent);
-    });
+    on<AuthenticationEvent>((event, emit) {});
+    on<SignInWithGoogleEvent>(signInWithGoogleEvent);
+    on<SignUpWithGoogleUsingEmailPasswordEvent>(
+        signUpWithGoogleUsingEmailPasswordEvent);
+    on<SignInWithGoogleUsingEmailPasswordEvent>(
+        signInWithGoogleUsingEmailPasswordEvent);
+    on<LogoutEvent>(logoutEvent);
+    on<UpdateDisplayNameEvent>(updateDisplayNameEvent);
+    on<UpdatePasswordEvent>(updatePasswordEvent);
   }
 
   FutureOr<void> signInWithGoogleEvent(

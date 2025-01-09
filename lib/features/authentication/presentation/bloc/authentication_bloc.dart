@@ -5,18 +5,12 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final Future<SharedPreferencesWithCache> _prefs =
-      SharedPreferencesWithCache.create(
-          cacheOptions: const SharedPreferencesWithCacheOptions(
-              allowList: <String>{'userDisplayName, userEmail, userPhotoUrl'}));
-
   AuthenticationBloc() : super(AuthenticationInitial()) {
     on<AuthenticationEvent>((event, emit) {});
     on<SignInWithGoogleEvent>(signInWithGoogleEvent);
@@ -46,12 +40,6 @@ class AuthenticationBloc
       );
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
-      // await _prefs.then((value) => value.setString(
-      //     'userDisplayName', userCredential.user!.displayName!));
-      // await _prefs.then(
-      //     (value) => value.setString('userEmail', userCredential.user!.email!));
-      // await _prefs.then((value) =>
-      //     value.setString('userPhotoUrl', userCredential.user!.photoURL!));
       emit(GoogleLoginSuccessState(user: userCredential.user!));
     } catch (e) {
       emit(GoogleLoginFailedState(message: e.toString()));
@@ -68,15 +56,8 @@ class AuthenticationBloc
         password: event.password,
       );
 
-      // Update the display name
       await userCredential.user?.updateDisplayName(event.displayName);
       await userCredential.user?.reload();
-      // await _prefs.then((value) => value.setString(
-      //     'userDisplayName', userCredential.user!.displayName!));
-      // await _prefs.then(
-      //     (value) => value.setString('userEmail', userCredential.user!.email!));
-      // await _prefs.then((value) =>
-      //     value.setString('userPhotoUrl', userCredential.user!.photoURL!));
       emit(UserRegistrationSuccessState(user: userCredential.user!));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -112,7 +93,6 @@ class AuthenticationBloc
   FutureOr<void> logoutEvent(
       LogoutEvent event, Emitter<AuthenticationState> emit) async {
     await FirebaseAuth.instance.signOut();
-    _prefs.then((value) => value.clear());
     emit(UserLoggedOutState());
   }
 

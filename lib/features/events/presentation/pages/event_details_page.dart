@@ -6,10 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EventDetailsPage extends StatelessWidget {
+class EventDetailsPage extends StatefulWidget {
   final Event event;
   const EventDetailsPage({super.key, required this.event});
 
+  @override
+  State<EventDetailsPage> createState() => _EventDetailsPageState();
+}
+
+class _EventDetailsPageState extends State<EventDetailsPage> {
   bool isCurrentUserOrganizer(Event event) {
     final User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
@@ -17,6 +22,15 @@ class EventDetailsPage extends StatelessWidget {
     } else {
       return false;
     }
+  }
+
+  void checkIfCurrentEventAlreadySaved() {
+    context.read<EventsBloc>().add(LoadOfflineEventsEvent());
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -34,14 +48,14 @@ class EventDetailsPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: MainAppBar(
-          title: event.title,
+          title: widget.event.title,
           automaticallyImplyLeading: true,
-          actions: isCurrentUserOrganizer(event)
+          actions: isCurrentUserOrganizer(widget.event)
               ? [
                   IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () => context.goNamed('createEvent', extra: {
-                      'event': event,
+                      'event': widget.event,
                       'isEditable': true,
                     }),
                   ),
@@ -64,7 +78,7 @@ class EventDetailsPage extends StatelessWidget {
                                 onPressed: () {
                                   context
                                       .read<EventsBloc>()
-                                      .add(DeleteEvent(event.id!));
+                                      .add(DeleteEvent(widget.event.id!));
                                 })
                           ],
                         ),
@@ -84,7 +98,7 @@ class EventDetailsPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image(
-                      image: NetworkImage(event.thumbnail),
+                      image: NetworkImage(widget.event.thumbnail),
                       height: 300,
                       fit: BoxFit.fill,
                       width: double.infinity,
@@ -107,7 +121,7 @@ class EventDetailsPage extends StatelessWidget {
                               Icon(Icons.category),
                               SizedBox(width: 16),
                               Text(
-                                event.category,
+                                widget.event.category,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -121,7 +135,7 @@ class EventDetailsPage extends StatelessWidget {
                               Icon(Icons.location_pin),
                               SizedBox(width: 16),
                               Text(
-                                event.location,
+                                widget.event.location,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -135,7 +149,7 @@ class EventDetailsPage extends StatelessWidget {
                               Icon(Icons.calendar_today),
                               SizedBox(width: 16),
                               Text(
-                                '${event.date} - ${event.time}',
+                                '${widget.event.date} - ${widget.event.time}',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -151,7 +165,7 @@ class EventDetailsPage extends StatelessWidget {
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 5),
-                          Text(event.description),
+                          Text(widget.event.description),
                           SizedBox(height: 20),
                           Text(
                             'Organizer',
@@ -159,7 +173,7 @@ class EventDetailsPage extends StatelessWidget {
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 5),
-                          Text(event.organizerName),
+                          Text(widget.event.organizerName),
                           Text('Organize Team'),
                         ],
                       ),
@@ -177,7 +191,7 @@ class EventDetailsPage extends StatelessWidget {
                     if (FirebaseAuth.instance.currentUser != null) {
                       context
                           .read<EventsBloc>()
-                          .add(SaveOfflineEventEvent(event));
+                          .add(SaveOfflineEventEvent(widget.event));
                     } else {
                       context.goNamed('signIn');
                     }

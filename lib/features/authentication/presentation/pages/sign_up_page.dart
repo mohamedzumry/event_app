@@ -104,7 +104,7 @@ class SignUpPage extends StatelessWidget {
                       style: const TextStyle(
                           color: Colors.teal, fontWeight: FontWeight.bold),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () => context.goNamed('signIn'),
+                        ..onTap = () => context.pushNamed('signIn'),
                     ),
                   ],
                 ),

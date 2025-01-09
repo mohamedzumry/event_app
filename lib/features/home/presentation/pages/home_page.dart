@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   final CarouselSliderController _carouselController =
       CarouselSliderController();
   final int _selectedIndex = 0;
-  ValueNotifier<int> _selectedCarouselIndex = ValueNotifier<int>(0);
+  final ValueNotifier<int> _selectedCarouselIndex = ValueNotifier<int>(0);
 
   @override
   void initState() {

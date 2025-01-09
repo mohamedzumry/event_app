@@ -37,12 +37,33 @@ class _MyEventsPageState extends State<MyEventsPage> {
         title: 'My Events',
         automaticallyImplyLeading: true,
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () => context.goNamed('createEvent'),
-            icon: const Icon(Icons.add_circle_rounded),
+        // actions: [
+        //   IconButton(
+        //     onPressed: () => context.goNamed('createEvent'),
+        //     icon: const Icon(Icons.add_circle_rounded),
+        //   ),
+        // ],
+      ), //
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(bottom: 20, right: 10),
+        child: SizedBox(
+          width: 60,
+          height: 60,
+          child: FloatingActionButton(
+            onPressed: () async {
+              context.goNamed('createEvent');
+            },
+            backgroundColor: Colors.blue.shade900,
+            hoverColor: const Color(0xFF1056C0),
+            shape: const CircleBorder(),
+            child: Icon(
+              Icons.add_rounded,
+              size: 30,
+              color: Colors.white,
+            ),
           ),
-        ],
+        ),
       ),
       bottomNavigationBar: MainBottomBar(selectedIndex: 2),
       body: BlocBuilder<EventsBloc, EventsState>(

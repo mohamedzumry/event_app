@@ -153,6 +153,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
         }
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: MainAppBar(
           title: 'Create Event',
           automaticallyImplyLeading: true,

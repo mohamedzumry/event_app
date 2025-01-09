@@ -109,7 +109,32 @@ class EventifyRouter {
                 event: event,
               ));
             },
-          )
+          ),
+          GoRoute(
+            name: 'myEventsFromAllEvents',
+            path: '/my-events-from-all-events',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: MyEventsPage());
+            },
+            routes: <RouteBase>[
+              GoRoute(
+                name: 'createEventFromAllEvents',
+                path: '/create-event-from-all-events',
+                pageBuilder: (context, state) {
+                  final Map<String, dynamic>? extra =
+                      state.extra as Map<String, dynamic>?;
+                  final Event? event = extra?['event'];
+                  final bool isEditable = extra?['isEditable'] ?? false;
+                  return MaterialPage(
+                    child: CreateEventPage(
+                      isEditable: isEditable,
+                      event: event,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ],
       ),
     ],

@@ -90,102 +90,98 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
         ),
         body: Stack(
           children: [
-            SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: 80),
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Image(
-                      image: NetworkImage(widget.event.thumbnail),
-                      height: 300,
-                      fit: BoxFit.fill,
-                      width: double.infinity,
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 20,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.grey.shade200,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+            ListView(
+              padding:
+                  EdgeInsets.only(bottom: 80, top: 10, left: 10, right: 10),
+              children: [
+                Image(
+                  image: NetworkImage(widget.event.thumbnail),
+                  height: 300,
+                  fit: BoxFit.fill,
+                  width: double.infinity,
+                ),
+                SizedBox(height: 10),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 20,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey.shade200,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              Icon(Icons.category),
-                              SizedBox(width: 16),
-                              Text(
-                                widget.event.category,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Icon(Icons.location_pin),
-                              SizedBox(width: 16),
-                              Text(
-                                widget.event.location,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Icon(Icons.calendar_today),
-                              SizedBox(width: 16),
-                              Text(
-                                '${widget.event.date} - ${widget.event.time}',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16),
-                          Divider(),
+                          Icon(Icons.category),
+                          SizedBox(width: 16),
                           Text(
-                            'About Event',
+                            widget.event.category,
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          SizedBox(height: 5),
-                          Text(widget.event.description),
-                          SizedBox(height: 20),
-                          Text(
-                            'Organizer',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 5),
-                          Text(widget.event.organizerName),
-                          Text('Organize Team'),
                         ],
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Icon(Icons.location_pin),
+                          SizedBox(width: 16),
+                          Text(
+                            widget.event.location,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Icon(Icons.calendar_today),
+                          SizedBox(width: 16),
+                          Text(
+                            '${widget.event.date} - ${widget.event.time}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      Divider(),
+                      Text(
+                        'About Event',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 5),
+                      Text(widget.event.description),
+                      SizedBox(height: 20),
+                      Text(
+                        'Organizer',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 5),
+                      Text(widget.event.organizerName),
+                      Text('Organize Team'),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: ElevatedButton(
                   onPressed: () {
                     if (FirebaseAuth.instance.currentUser != null) {

@@ -159,149 +159,171 @@ class _CreateEventPageState extends State<CreateEventPage> {
           automaticallyImplyLeading: true,
           centerTitle: true,
         ),
-        body: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                TextFormField(
-                  controller: _titleController,
-                  decoration: InputDecoration(
-                    labelText: 'Title',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter title';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  controller: _locationController,
-                  decoration: InputDecoration(
-                    labelText: 'Location',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter location';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  controller: _dateController,
-                  decoration: InputDecoration(
-                    labelText: 'Date',
-                    border: OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.calendar_today),
-                      onPressed: () {
+        body: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    SizedBox(height: 16.0),
+                    TextFormField(
+                      controller: _titleController,
+                      decoration: InputDecoration(
+                        labelText: 'Title',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter title';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16.0),
+                    TextFormField(
+                      controller: _locationController,
+                      decoration: InputDecoration(
+                        labelText: 'Location',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter location';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16.0),
+                    TextFormField(
+                      onTap: () {
                         _selectDate(context);
                       },
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please select a date';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  controller: _timeController,
-                  decoration: InputDecoration(
-                    labelText: 'Time',
-                    border: OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.access_time),
-                      onPressed: () {
-                        _selectTime(context);
+                      readOnly: true,
+                      controller: _dateController,
+                      decoration: InputDecoration(
+                        labelText: 'Date',
+                        border: OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.calendar_today),
+                          onPressed: () {
+                            // _selectDate(context);
+                          },
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please select a date';
+                        }
+                        return null;
                       },
                     ),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please select a time';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  controller: _categoryController,
-                  decoration: InputDecoration(
-                    labelText: 'Category',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter category';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  controller: _descriptionController,
-                  decoration: InputDecoration(
-                    labelText: 'Description',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter description';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.0),
-                if (widget.isEditable == true &&
-                    widget.event != null &&
-                    widget.event!.thumbnail.isNotEmpty)
-                  Image.network(
-                    widget.event!.thumbnail,
-                    // width: double.infinity,
-                    // height: 160,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const Center(child: CircularProgressIndicator());
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        width: double.infinity,
-                        height: 160,
-                        color: Colors.grey[200],
-                        child: const Icon(Icons.broken_image,
-                            size: 50, color: Colors.grey),
-                      );
-                    },
-                  ),
-                SizedBox(height: 16.0),
-                GestureDetector(
-                  onTap: () async {
-                    _isLoading = true;
-                    if (_isLoading) showImageLoadingDialog();
-                    await _pickImage();
-                    if (!_isLoading) closeImageLoadingDialog();
-                  },
-                  child: _image != null
-                      ? Image.file(_image!)
-                      : Container(
-                          color: Colors.grey[200],
-                          height: 150,
-                          child:
-                              Icon(Icons.add_a_photo, color: Colors.grey[800]),
+                    SizedBox(height: 16.0),
+                    TextFormField(
+                      onTap: () {
+                        _selectTime(context);
+                      },
+                      readOnly: true,
+                      controller: _timeController,
+                      decoration: InputDecoration(
+                        labelText: 'Time',
+                        border: OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.access_time),
+                          onPressed: () {
+                            // _selectTime(context);
+                          },
                         ),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please select a time';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16.0),
+                    TextFormField(
+                      controller: _categoryController,
+                      decoration: InputDecoration(
+                        labelText: 'Category',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter category';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16.0),
+                    TextFormField(
+                      controller: _descriptionController,
+                      decoration: InputDecoration(
+                        labelText: 'Description',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter description';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16.0),
+                    if (widget.isEditable == true &&
+                        widget.event != null &&
+                        widget.event!.thumbnail.isNotEmpty &&
+                        _image == null)
+                      Image.network(
+                        widget.event!.thumbnail,
+                        // width: double.infinity,
+                        // height: 160,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            width: double.infinity,
+                            height: 160,
+                            color: Colors.grey[200],
+                            child: const Icon(Icons.broken_image,
+                                size: 50, color: Colors.grey),
+                          );
+                        },
+                      ),
+                    SizedBox(height: 16.0),
+                    GestureDetector(
+                      onTap: () async {
+                        _isLoading = true;
+                        if (_isLoading) showImageLoadingDialog();
+                        await _pickImage();
+                        if (!_isLoading) closeImageLoadingDialog();
+                      },
+                      child: _image != null
+                          ? Image.file(_image!)
+                          : Container(
+                              color: Colors.grey[200],
+                              height: 150,
+                              child: Icon(Icons.add_a_photo,
+                                  color: Colors.grey[800]),
+                            ),
+                    ),
+                    SizedBox(height: 60.0),
+                  ],
                 ),
-                SizedBox(height: 16.0),
-                ElevatedButton(
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       if (thumbnailUrl != null) {
@@ -338,13 +360,18 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       }
                     }
                   },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size.fromHeight(50),
+                    backgroundColor: Colors.blue.shade900,
+                    foregroundColor: Colors.white,
+                  ),
                   child: Text(widget.isEditable == true
                       ? 'Update Event'
                       : 'Create Event'),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

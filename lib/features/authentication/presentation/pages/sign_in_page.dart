@@ -54,6 +54,7 @@ class SignInPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                //
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -69,7 +70,9 @@ class SignInPage extends StatelessWidget {
                     return null;
                   },
                 ),
+
                 const SizedBox(height: 10),
+
                 TextFormField(
                   controller: _passwordController,
                   keyboardType: TextInputType.visiblePassword,
@@ -79,12 +82,15 @@ class SignInPage extends StatelessWidget {
                   validator: (value) =>
                       value!.isEmpty ? 'Password is required' : null,
                 ),
+
                 const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: MaterialButton(
-                      color: Colors.teal[100],
-                      elevation: 10,
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStatePropertyAll(Colors.blue.shade900)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -102,7 +108,10 @@ class SignInPage extends StatelessWidget {
                           SizedBox(
                             width: 20,
                           ),
-                          Text("Sign In with Email & Password")
+                          Text(
+                            "Sign In with Email & Password",
+                            style: TextStyle(color: Colors.white),
+                          )
                         ],
                       ),
                       onPressed: () {
@@ -117,17 +126,20 @@ class SignInPage extends StatelessWidget {
                         }
                       }),
                 ),
+
                 const SizedBox(height: 10),
+
                 const Text(
                   "OR",
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: MaterialButton(
-                    color: Colors.teal[100],
-                    elevation: 10,
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            WidgetStatePropertyAll(Colors.blue.shade900)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -145,7 +157,10 @@ class SignInPage extends StatelessWidget {
                         SizedBox(
                           width: 20,
                         ),
-                        Text("Sign In with Google")
+                        Text(
+                          "Sign In with Google",
+                          style: TextStyle(color: Colors.white),
+                        )
                       ],
                     ),
                     onPressed: () => context.read<AuthenticationBloc>().add(
@@ -153,7 +168,9 @@ class SignInPage extends StatelessWidget {
                         ),
                   ),
                 ),
+
                 const SizedBox(height: 20),
+
                 RichText(
                   text: TextSpan(
                     text: 'Already have an account? ',

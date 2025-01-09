@@ -36,7 +36,36 @@ class _AllEventsPageState extends State<AllEventsPage> {
       appBar: MainAppBar(
         title: 'All Events',
         automaticallyImplyLeading: false,
-        centerTitle: true,
+        centerTitle: false,
+        actions: [
+          //My Events Button
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: ElevatedButton(
+              onPressed: () async {
+                if (user == null) {
+                  context.goNamed('signIn');
+                } else {
+                  //Nav to My Events
+                  context.goNamed('myEventsFromAllEvents');
+                }
+              },
+              style: ButtonStyle(
+                  elevation: const WidgetStatePropertyAll(4),
+                  side: WidgetStatePropertyAll(
+                      BorderSide(color: Colors.blue.shade900)),
+                  backgroundColor: WidgetStatePropertyAll(Colors.white)),
+              child: Text(
+                "Go to My Events",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: MainBottomBar(selectedIndex: 1),
       body: BlocBuilder<EventsBloc, EventsState>(
@@ -49,43 +78,11 @@ class _AllEventsPageState extends State<AllEventsPage> {
             if (events.isEmpty) {
               return Center(child: Text('No events found.'));
             }
-            return Stack(children: [
-              ListView(
-                shrinkWrap: true,
-                physics: AlwaysScrollableScrollPhysics(),
-                children:
-                    events.map((event) => EventCard(event: event)).toList(),
-              ),
-
-              //My Events Button
-              Positioned(
-                top: 10,
-                right: 10,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (user == null) {
-                      context.goNamed('signIn');
-                    } else {
-                      //Nav to My Events
-                      context.goNamed('myEventsFromAllEvents');
-                    }
-                  },
-                  style: ButtonStyle(
-                      elevation: const WidgetStatePropertyAll(4),
-                      side: WidgetStatePropertyAll(
-                          BorderSide(color: Colors.blue.shade900)),
-                      backgroundColor: WidgetStatePropertyAll(Colors.white)),
-                  child: Text(
-                    "Go to My Events",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-            ]);
+            return ListView(
+              shrinkWrap: true,
+              physics: AlwaysScrollableScrollPhysics(),
+              children: events.map((event) => EventCard(event: event)).toList(),
+            );
           } else if (state is EventLoadFailure) {
             return Center(child: Text(state.message));
           } else {

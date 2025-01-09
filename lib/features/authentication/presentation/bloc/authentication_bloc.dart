@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 part 'authentication_event.dart';
@@ -41,6 +42,27 @@ class AuthenticationBloc
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
       emit(GoogleLoginSuccessState(user: userCredential.user!));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'account-exists-with-different-credential') {
+        emit(GoogleLoginFailedState(
+            message:
+                'The account already exists with a different credential.'));
+      } else if (e.code == 'invalid-credential') {
+        emit(GoogleLoginFailedState(
+            message: 'Error occurred while accessing credentials. Try again.'));
+      } else {
+        emit(GoogleLoginFailedState(
+            message: 'Error occurred while accessing credentials. Try again.'));
+      }
+    } on PlatformException catch (e) {
+      if (e.code == 'network-request-failed') {
+        emit(GoogleLoginFailedState(
+            message:
+                'Network request failed. Please check your internet connection.'));
+      } else {
+        emit(GoogleLoginFailedState(
+            message: 'Error occurred while accessing credentials. Try again.'));
+      }
     } catch (e) {
       emit(GoogleLoginFailedState(message: e.toString()));
     }

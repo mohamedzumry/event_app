@@ -82,10 +82,11 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   // Offline Event Bloc Functions
 
   FutureOr<void> saveOfflineEventEvent(
-      SaveOfflineEventEvent event, Emitter<EventsState> emit) {
+      SaveOfflineEventEvent event, Emitter<EventsState> emit) async {
     try {
-      offlineEventRepository.addEvent(event.event);
-      emit(OfflineEventSavedSuccessfullyState());
+      await offlineEventRepository.addEvent(event.event).then((_) {
+        emit(OfflineEventSavedSuccessfullyState());
+      });
     } catch (e) {
       emit(OfflineEventSaveFailureState());
     }

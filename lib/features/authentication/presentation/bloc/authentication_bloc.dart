@@ -43,6 +43,7 @@ class AuthenticationBloc
           await FirebaseAuth.instance.signInWithCredential(credential);
       emit(GoogleLoginSuccessState(user: userCredential.user!));
     } on FirebaseAuthException catch (e) {
+      debugPrint("Firebase Auth Exception: ${e.message}");
       if (e.code == 'account-exists-with-different-credential') {
         emit(GoogleLoginFailedState(
             message:
@@ -55,6 +56,7 @@ class AuthenticationBloc
             message: 'Error occurred while accessing credentials. Try again.'));
       }
     } on PlatformException catch (e) {
+      debugPrint(e.message);
       if (e.code == 'network-request-failed') {
         emit(GoogleLoginFailedState(
             message:

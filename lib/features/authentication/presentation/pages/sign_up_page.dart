@@ -21,7 +21,7 @@ class SignUpPage extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Signed up successfully')),
           );
-          context.goNamed('signIn');
+          context.goNamed('profile');
         } else if (state is UserRegistrationFailedState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),

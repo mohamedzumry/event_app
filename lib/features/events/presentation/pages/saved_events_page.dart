@@ -14,9 +14,9 @@ class SavedEventsPage extends StatefulWidget {
 
 class _SavedEventsPageState extends State<SavedEventsPage> {
   @override
-  void didChangeDependencies() {
+  void initState() {
     context.read<EventsBloc>().add(LoadOfflineEventsEvent());
-    super.didChangeDependencies();
+    super.initState();
   }
 
   @override

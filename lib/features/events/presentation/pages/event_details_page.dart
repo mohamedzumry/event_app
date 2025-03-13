@@ -40,7 +40,10 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
       listener: (context, state) {
         if (state is OfflineEventSavedSuccessfullyState) {
           context.read<EventsBloc>().add(LoadOfflineEventsEvent());
+          debugPrint(state.toString());
           context.goNamed('savedEvents');
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Event saved successfully')));
         } else if (state is EventDeletedSuccessfullyState) {
           context.goNamed('myEvents');
         }
